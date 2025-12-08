@@ -12,8 +12,8 @@ export class Event {
   @Column({ name: "start_date", type: "timestamp" })
   startDate: Date;
 
-  @Column({ name: "is_finished", default: false })
-  isFinished: boolean;
+  @Column({ name: "finish_date", type: "timestamp", nullable: true })
+  finishDate: Date | null;
 
   @Column({ name: "is_deleted", default: false })
   isDeleted: boolean;

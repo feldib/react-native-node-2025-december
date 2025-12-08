@@ -30,13 +30,13 @@ export class Initial1764777528828 implements MigrationInterface {
 
     // Insert test events
     await queryRunner.query(`
-      INSERT INTO events (name, start_date, is_finished, is_deleted, category_id)
+      INSERT INTO events (name, start_date, finish_date, is_deleted, category_id)
       VALUES 
-        ('Tech Meetup 2025', '2025-01-15 18:00:00', false, false, 1),
-        ('React Workshop', '2025-01-20 14:00:00', false, false, 2),
-        ('Startup Pitch Night', '2025-02-01 19:00:00', false, false, 3),
-        ('Coffee & Code', '2025-01-10 10:00:00', true, false, 1),
-        ('Design Sprint', '2025-02-15 09:00:00', false, false, 2)
+        ('Tech Meetup 2025', '2025-01-15 18:00:00', NULL, false, 1),
+        ('React Workshop', '2025-01-20 14:00:00', NULL, false, 2),
+        ('Startup Pitch Night', '2025-02-01 19:00:00', NULL, false, 3),
+        ('Coffee & Code', '2025-01-10 10:00:00', '2025-01-10 12:00:00', false, 1),
+        ('Design Sprint', '2025-02-15 09:00:00', NULL, false, 2)
     `);
 
     // Insert test user-event relationships
