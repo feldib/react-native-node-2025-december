@@ -13,13 +13,13 @@ export class Initial1764777528828 implements MigrationInterface {
 
     // Insert test users
     await queryRunner.query(`
-      INSERT INTO users (first_name, last_name, password, age, gender, description, photos)
+      INSERT INTO users (first_name, last_name, email, password, age, gender, description, photos)
       VALUES 
-        ('John', 'Doe', '${hashedPassword}', 28, 'male', 'Software engineer and tech enthusiast', ARRAY[]::text[]),
-        ('Jane', 'Smith', '${hashedPassword}', 25, 'female', 'Designer and creative thinker', ARRAY[]::text[]),
-        ('Bob', 'Johnson', '${hashedPassword}', 32, 'male', 'Product manager and strategist', ARRAY[]::text[]),
-        ('Alice', 'Williams', '${hashedPassword}', 30, 'female', 'Marketing specialist', ARRAY[]::text[]),
-        ('Charlie', 'Brown', '${hashedPassword}', 27, 'male', 'Data scientist', ARRAY[]::text[])
+        ('John', 'Doe', 'john.doe@example.com', '${hashedPassword}', 28, 'male', 'Software engineer and tech enthusiast', ARRAY[]::text[]),
+        ('Jane', 'Smith', 'jane.smith@example.com', '${hashedPassword}', 25, 'female', 'Designer and creative thinker', ARRAY[]::text[]),
+        ('Bob', 'Johnson', 'bob.johnson@example.com', '${hashedPassword}', 32, 'male', 'Product manager and strategist', ARRAY[]::text[]),
+        ('Alice', 'Williams', 'alice.williams@example.com', '${hashedPassword}', 30, 'female', 'Marketing specialist', ARRAY[]::text[]),
+        ('Charlie', 'Brown', 'charlie.brown@example.com', '${hashedPassword}', 27, 'male', 'Data scientist', ARRAY[]::text[])
     `);
 
     // Insert test events

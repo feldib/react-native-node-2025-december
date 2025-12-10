@@ -5,28 +5,78 @@ import bcrypt from "bcrypt";
 
 const userRepository = AppDataSource.getRepository(User);
 
-export const createUser = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response) => {
   try {
-    const { firstName, lastName, password, age, gender, description, photos } =
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password are required" });
+    }
+
+    const user = await userRepository.findOne({
+      where: { email, isDeleted: false },
+    });
+
+    if (!user) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    const { password: _, ...userWithoutPassword } = user;
+
+    res.json({
+      user: userWithoutPassword,
+      token: null,
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const register = async (req: Request, res: Response) => {
+  try {
+    const { firstName, lastName, email, password, age, gender, description } =
       req.body;
+
+    if (!firstName || !lastName || !email || !password || !age || !gender) {
+      return res.status(400).json({
+        error:
+          "First name, last name, email, password, age, and gender are required",
+      });
+    }
+
+    const existingUser = await userRepository.findOne({ where: { email } });
+
+    if (existingUser) {
+      return res.status(409).json({ error: "Email already registered" });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = userRepository.create({
       firstName,
       lastName,
+      email,
       password: hashedPassword,
       age,
       gender,
       description,
-      photos,
+      photos: [],
     });
 
     const savedUser = await userRepository.save(user);
 
-    // Remove password from response
     const { password: _, ...userWithoutPassword } = savedUser;
-    res.status(201).json(userWithoutPassword);
+
+    res.status(201).json({
+      user: userWithoutPassword,
+      token: null,
+    });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
@@ -40,6 +90,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
         "id",
         "firstName",
         "lastName",
+        "email",
         "dateJoined",
         "age",
         "gender",
@@ -61,6 +112,7 @@ export const getUserById = async (req: Request, res: Response) => {
         "id",
         "firstName",
         "lastName",
+        "email",
         "dateJoined",
         "age",
         "gender",
