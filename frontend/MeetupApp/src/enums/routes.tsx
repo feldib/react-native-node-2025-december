@@ -5,6 +5,8 @@ import PastEventsScreen from '../screens/PastEventsScreen';
 import EventDetailScreen from '../screens/EventDetailScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
+export type DisplayedEventType = 'current' | 'past';
+
 export enum RouteKey {
   Login = 'login',
   Register = 'register',
@@ -16,7 +18,7 @@ export enum RouteKey {
   Profile = 'profile',
 }
 
-export enum RouteName {
+enum RouteName {
   Login = 'Login',
   Register = 'Register',
   CurrentEventsTab = 'CurrentEvents',
@@ -27,19 +29,17 @@ export enum RouteName {
   Profile = 'ProfileScreen',
 }
 
-export enum RouteTitle {
+enum RouteTitle {
   CurrentEvents = 'Current Events',
   PastEvents = 'Past Events',
   EventDetails = 'Event Details',
   Profile = 'Profile',
 }
 
-export enum RouteLabel {
+enum RouteLabel {
   CurrentEvents = 'Current Events',
   PastEvents = 'Past Events',
 }
-
-export type DisplayedEventType = 'current' | 'past';
 
 export const Routes = {
   [RouteKey.Login]: {
