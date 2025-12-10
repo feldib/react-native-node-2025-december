@@ -5,7 +5,6 @@ import dotenv from "dotenv";
 import { AppDataSource } from "./config/database";
 import userRoutes from "./routes/users";
 import eventRoutes from "./routes/events";
-import categoryRoutes from "./routes/categories";
 
 dotenv.config();
 
@@ -26,7 +25,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // Routes
 app.use("/api/users", userRoutes);
 app.use("/api/events", eventRoutes);
-app.use("/api/categories", categoryRoutes);
 
 // Health check endpoint
 app.get("/health", (req: Request, res: Response) => {

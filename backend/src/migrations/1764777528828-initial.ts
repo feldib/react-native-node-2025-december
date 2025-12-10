@@ -6,20 +6,9 @@ export class Initial1764777528828 implements MigrationInterface {
     // Hash password for test users
     const hashedPassword = await bcrypt.hash("password123", 10);
 
-    // Insert categories
-    // 0 - Meetup
-    // 1 - Party
-    // 2 - Sports
-    // 3 - Boardgames
-    // 4 - Walk and Talk
+    // Create category enum type
     await queryRunner.query(`
-      INSERT INTO categories (name)
-      VALUES 
-        ('Meetup'),
-        ('Party'),
-        ('Sports'),
-        ('Boardgames'),
-        ('Walk and Talk')
+      CREATE TYPE category_enum AS ENUM ('meetup', 'party', 'sports', 'boardgames', 'walk_and_talk')
     `);
 
     // Insert test users
@@ -35,13 +24,13 @@ export class Initial1764777528828 implements MigrationInterface {
 
     // Insert test events
     await queryRunner.query(`
-      INSERT INTO events (name, start_date, finish_date, is_deleted, category_id)
+      INSERT INTO events (name, start_date, finish_date, is_deleted, category)
       VALUES 
-        ('Tech Meetup 2025', '2025-01-15 18:00:00', NULL, false, 1),
-        ('React Workshop', '2025-01-20 14:00:00', NULL, false, 2),
-        ('Startup Pitch Night', '2025-02-01 19:00:00', NULL, false, 3),
-        ('Coffee & Code', '2025-01-10 10:00:00', '2025-01-10 12:00:00', false, 1),
-        ('Design Sprint', '2025-02-15 09:00:00', NULL, false, 2)
+        ('Tech Meetup 2025', '2025-01-15 18:00:00', NULL, false, 'meetup'),
+        ('React Workshop', '2025-01-20 14:00:00', NULL, false, 'party'),
+        ('Startup Pitch Night', '2025-02-01 19:00:00', NULL, false, 'sports'),
+        ('Coffee & Code', '2025-01-10 10:00:00', '2025-01-10 12:00:00', false, 'meetup'),
+        ('Design Sprint', '2025-02-15 09:00:00', NULL, false, 'boardgames')
     `);
 
     // Insert test user-event relationships

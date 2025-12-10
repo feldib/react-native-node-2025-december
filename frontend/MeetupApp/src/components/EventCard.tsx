@@ -2,6 +2,7 @@ import { StyleSheet, Text, Pressable } from 'react-native';
 import { View } from 'react-native';
 import { Event } from '../types/Event';
 import { useNavigation } from '@react-navigation/native';
+import { getCategoryName } from '../helpers/categories';
 
 const EventCard = ({ event }: { event: Event }) => {
   const navigation = useNavigation();
@@ -15,9 +16,7 @@ const EventCard = ({ event }: { event: Event }) => {
     <Pressable onPress={handlePress}>
       <View style={styles.card}>
         <Text style={styles.title}>{event.name}</Text>
-        <Text style={styles.category}>
-          {event.categoryName || 'Uncategorized'}
-        </Text>
+        <Text style={styles.category}>{getCategoryName(event.category)}</Text>
         <Text>Start Date: {new Date(event.startDate).toLocaleString()}</Text>
         {event.finishDate !== null && (
           <Text>

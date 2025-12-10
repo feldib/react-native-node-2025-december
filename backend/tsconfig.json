@@ -16,6 +16,6 @@
     "strictPropertyInitialization": false,
     "sourceMap": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../frontend/MeetupApp/src/enums"],
   "exclude": ["node_modules", "dist"]
 }

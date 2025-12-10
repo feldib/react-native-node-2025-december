@@ -18,8 +18,12 @@ export class Event {
   @Column({ name: "is_deleted", default: false })
   isDeleted: boolean;
 
-  @Column({ name: "category_id" })
-  categoryId: number;
+  @Column({
+    name: "category",
+    type: "enum",
+    enum: ["meetup", "party", "sports", "boardgames", "walk_and_talk"],
+  })
+  category: string;
 
   @OneToMany(() => UsersOfEvent, (usersOfEvent) => usersOfEvent.event)
   usersOfEvents: UsersOfEvent[];

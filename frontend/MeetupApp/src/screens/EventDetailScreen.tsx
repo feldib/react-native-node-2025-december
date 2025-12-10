@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Event } from '../types/Event';
 import axios from 'axios';
 import config from '../../config';
+import { getCategoryName } from '../helpers/categories';
 
 const EventDetailScreen = () => {
   const route = useRoute();
@@ -50,9 +51,7 @@ const EventDetailScreen = () => {
     <ScrollView style={styles.container}>
       <View style={styles.card}>
         <Text style={styles.title}>{event.name}</Text>
-        <Text style={styles.category}>
-          {event.categoryName || 'Uncategorized'}
-        </Text>
+        <Text style={styles.category}>{getCategoryName(event.category)}</Text>
         <Text>Start Date: {new Date(event.startDate).toLocaleString()}</Text>
         {event.finishDate !== null && (
           <Text>

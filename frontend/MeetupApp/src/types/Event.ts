@@ -9,9 +9,7 @@ export type Event = {
 
   finishDate: Date | null;
 
-  categoryId: number;
-
-  categoryName: string | null;
+  category: string;
 
   users: UsersOfEvent[];
 };

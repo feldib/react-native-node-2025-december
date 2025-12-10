@@ -2,21 +2,19 @@ import { Request, Response } from "express";
 import { AppDataSource } from "../config/database";
 import { Event } from "../entities/Event";
 import { UsersOfEvent } from "../entities/UsersOfEvent";
-import { Category } from "../entities/Category";
 
 const eventRepository = AppDataSource.getRepository(Event);
 const usersOfEventRepository = AppDataSource.getRepository(UsersOfEvent);
-const categoryRepository = AppDataSource.getRepository(Category);
 
 export const createEvent = async (req: Request, res: Response) => {
   try {
-    const { name, startDate, finishDate, categoryId } = req.body;
+    const { name, startDate, finishDate, category } = req.body;
 
     const event = eventRepository.create({
       name,
       startDate: new Date(startDate),
       finishDate: finishDate ? new Date(finishDate) : null,
-      categoryId,
+      category,
     });
 
     const savedEvent = await eventRepository.save(event);
@@ -33,8 +31,8 @@ export const getAllEvents = async (req: Request, res: Response) => {
       order: { startDate: "DESC" },
     });
 
-    // Get all users and category for all events
-    const eventsWithUsersAndCategories = await Promise.all(
+    // Get all users for all events
+    const eventsWithUsers = await Promise.all(
       events.map(async (event) => {
         const relations = await usersOfEventRepository.find({
           where: { eventId: event.id },
@@ -44,16 +42,11 @@ export const getAllEvents = async (req: Request, res: Response) => {
         // Filter out deleted users
         const users = relations.filter((r) => !r.user.isDeleted);
 
-        // Get category name
-        const category = await categoryRepository.findOne({
-          where: { id: event.categoryId },
-        });
-
-        return { ...event, users, categoryName: category?.name };
+        return { ...event, users };
       })
     );
 
-    res.json(eventsWithUsersAndCategories);
+    res.json(eventsWithUsers);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
@@ -91,7 +84,7 @@ export const getEventById = async (req: Request, res: Response) => {
 
 export const updateEvent = async (req: Request, res: Response) => {
   try {
-    const { name, startDate, finishDate, categoryId } = req.body;
+    const { name, startDate, finishDate, category } = req.body;
     const eventId = parseInt(req.params.id);
 
     const event = await eventRepository.findOne({
@@ -106,7 +99,7 @@ export const updateEvent = async (req: Request, res: Response) => {
     if (startDate !== undefined) event.startDate = new Date(startDate);
     if (finishDate !== undefined)
       event.finishDate = finishDate ? new Date(finishDate) : null;
-    if (categoryId !== undefined) event.categoryId = categoryId;
+    if (category !== undefined) event.category = category;
 
     const savedEvent = await eventRepository.save(event);
     res.json(savedEvent);
