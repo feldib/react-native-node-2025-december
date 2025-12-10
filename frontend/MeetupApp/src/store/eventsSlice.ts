@@ -5,7 +5,8 @@ import { getEvents, getEventById, joinEventApi } from '../fetching/events';
 interface EventsState {
   currentEvents: Event[];
   pastEvents: Event[];
-  displayedEvent: Event | null;
+  displayedCurrentEvent: Event | null;
+  displayedPastEvent: Event | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -13,7 +14,8 @@ interface EventsState {
 const initialState: EventsState = {
   currentEvents: [],
   pastEvents: [],
-  displayedEvent: null,
+  displayedCurrentEvent: null,
+  displayedPastEvent: null,
   isLoading: false,
   error: null,
 };
@@ -67,8 +69,9 @@ const eventsSlice = createSlice({
   name: 'events',
   initialState,
   reducers: {
-    clearCurrentEvent: state => {
-      state.displayedEvent = null;
+    clearDisplayedEvent: state => {
+      state.displayedCurrentEvent = null;
+      state.displayedPastEvent = null;
     },
     clearError: state => {
       state.error = null;
@@ -107,9 +110,9 @@ const eventsSlice = createSlice({
       fetchEventById.fulfilled,
       (state, action: PayloadAction<Event>) => {
         state.isLoading = false;
-        state.displayedEvent = action.payload;
-        // Update in appropriate list based on finishDate
+        // Set appropriate displayed event based on finishDate
         if (action.payload.finishDate === null) {
+          state.displayedCurrentEvent = action.payload;
           const index = state.currentEvents.findIndex(
             (e: Event) => e.id === action.payload.id,
           );
@@ -117,6 +120,7 @@ const eventsSlice = createSlice({
             state.currentEvents[index] = action.payload;
           }
         } else {
+          state.displayedPastEvent = action.payload;
           const index = state.pastEvents.findIndex(
             (e: Event) => e.id === action.payload.id,
           );
@@ -140,9 +144,9 @@ const eventsSlice = createSlice({
       joinEvent.fulfilled,
       (state, action: PayloadAction<Event>) => {
         state.isLoading = false;
-        state.displayedEvent = action.payload;
-        // Update in appropriate list based on finishDate
+        // Set appropriate displayed event based on finishDate
         if (action.payload.finishDate === null) {
+          state.displayedCurrentEvent = action.payload;
           const index = state.currentEvents.findIndex(
             (e: Event) => e.id === action.payload.id,
           );
@@ -150,6 +154,7 @@ const eventsSlice = createSlice({
             state.currentEvents[index] = action.payload;
           }
         } else {
+          state.displayedPastEvent = action.payload;
           const index = state.pastEvents.findIndex(
             (e: Event) => e.id === action.payload.id,
           );
@@ -166,5 +171,5 @@ const eventsSlice = createSlice({
   },
 });
 
-export const { clearCurrentEvent, clearError } = eventsSlice.actions;
+export const { clearDisplayedEvent, clearError } = eventsSlice.actions;
 export default eventsSlice.reducer;

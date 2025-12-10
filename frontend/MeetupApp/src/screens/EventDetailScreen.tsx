@@ -20,12 +20,23 @@ const EventDetailScreen = () => {
   const route = useRoute();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
-  const { displayedEvent: event, isLoading: loading } = useAppSelector(
-    state => state.events,
-  );
+  const {
+    displayedCurrentEvent,
+    displayedPastEvent,
+    isLoading: loading,
+  } = useAppSelector(state => state.events);
 
   // @ts-ignore - route params from navigation
-  const { eventId } = route.params;
+  const { eventId, eventType } = route.params;
+
+  const event = useMemo(() => {
+    return eventType === 'current' ? displayedCurrentEvent : displayedPastEvent;
+  }, [eventType, displayedCurrentEvent, displayedPastEvent]);
+
+  const finishDate = useMemo(() => {
+    if (!event || !event.finishDate) return false;
+    return new Date(event.finishDate);
+  }, [event]);
 
   useEffect(() => {
     dispatch(fetchEventById(eventId));
@@ -120,20 +131,18 @@ const EventDetailScreen = () => {
         </View>
         <Text style={styles.title}>{event.name}</Text>
         <Text>Start Date: {new Date(event.startDate).toLocaleString()}</Text>
-        {event.finishDate !== null && (
-          <Text>
-            Finish date: {new Date(event.finishDate).toLocaleString()}
-          </Text>
-        )}
+        {finishDate && <Text>Finish date: {finishDate.toLocaleString()}</Text>}
         <Text>Users: {event.users.length}</Text>
 
-        <TouchableOpacity
-          style={[styles.button, buttonConfig.style]}
-          disabled={buttonConfig.disabled}
-          onPress={handleJoin}
-        >
-          <Text style={styles.buttonText}>{buttonConfig.text}</Text>
-        </TouchableOpacity>
+        {!finishDate ? (
+          <TouchableOpacity
+            style={[styles.button, buttonConfig.style]}
+            disabled={buttonConfig.disabled}
+            onPress={handleJoin}
+          >
+            <Text style={styles.buttonText}>{buttonConfig.text}</Text>
+          </TouchableOpacity>
+        ) : null}
       </View>
     </ScrollView>
   );

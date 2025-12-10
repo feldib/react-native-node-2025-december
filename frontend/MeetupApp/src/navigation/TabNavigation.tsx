@@ -38,6 +38,7 @@ function CurrentEventsStack() {
         name="EventDetail"
         component={EventDetailScreen}
         options={{ title: 'Event Details' }}
+        initialParams={{ eventType: 'current' }}
       />
       <CurrentEventsStackNavigator.Screen
         name="ProfileScreen"
@@ -56,16 +57,18 @@ function PastEventsStack() {
         component={PastEventsScreen}
         options={({ navigation }) => ({
           title: 'Past Events',
-          headerRight: () => {
-            const handlePress = () => navigation.navigate('ProfileScreen');
-            return <ProfileHeaderButton onPress={handlePress} />;
-          },
+          headerRight: () => (
+            <ProfileHeaderButton
+              onPress={() => navigation.navigate('ProfileScreen')}
+            />
+          ),
         })}
       />
       <PastEventsStackNavigator.Screen
         name="EventDetail"
         component={EventDetailScreen}
         options={{ title: 'Event Details' }}
+        initialParams={{ eventType: 'past' }}
       />
       <PastEventsStackNavigator.Screen
         name="ProfileScreen"
