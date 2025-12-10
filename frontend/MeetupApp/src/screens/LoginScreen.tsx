@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { login } from '../store/authSlice';
+import { RouteKey, Routes } from '../enums/routes';
 
 const LoginScreen = ({ navigation }: any) => {
   const [email, setEmail] = useState('');
@@ -66,7 +67,7 @@ const LoginScreen = ({ navigation }: any) => {
 
       <TouchableOpacity
         style={styles.linkButton}
-        onPress={() => navigation.navigate('Register')}
+        onPress={() => navigation.navigate(Routes[RouteKey.Register].name)}
       >
         <Text style={styles.linkText}>Don't have an account? Register</Text>
       </TouchableOpacity>

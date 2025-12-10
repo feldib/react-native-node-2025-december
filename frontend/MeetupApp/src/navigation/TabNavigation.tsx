@@ -1,83 +1,11 @@
 import CurrentEventsScreen from '../screens/CurrentEventsScreen';
 import PastEventsScreen from '../screens/PastEventsScreen';
-import EventDetailScreen from '../screens/EventDetailScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ProfileScreen from '../screens/ProfileScreen';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faPerson } from '@fortawesome/free-solid-svg-icons';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { Pressable } from 'react-native';
+import React from 'react';
+import EventsStack from './EventsStack';
+import { Routes, RouteKey } from '../enums/routes';
 
-const CurrentEventsStackNavigator = createNativeStackNavigator();
-const PastEventsStackNavigator = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
-const ProfileHeaderButton = ({ onPress }: { onPress: () => void }) => (
-  <Pressable onPress={onPress}>
-    <FontAwesomeIcon icon={faPerson as IconProp} size={20} color="#6c7899ff" />
-  </Pressable>
-);
-
-function CurrentEventsStack() {
-  return (
-    <CurrentEventsStackNavigator.Navigator>
-      <CurrentEventsStackNavigator.Screen
-        name="CurrentEventsList"
-        component={CurrentEventsScreen}
-        options={({ navigation }) => ({
-          title: 'Current Events',
-          headerRight: () => (
-            <ProfileHeaderButton
-              onPress={() => navigation.navigate('ProfileScreen')}
-            />
-          ),
-        })}
-      />
-      <CurrentEventsStackNavigator.Screen
-        name="EventDetail"
-        component={EventDetailScreen}
-        options={{ title: 'Event Details' }}
-        initialParams={{ eventType: 'current' }}
-      />
-      <CurrentEventsStackNavigator.Screen
-        name="ProfileScreen"
-        component={ProfileScreen}
-        options={{ title: 'Profile' }}
-      />
-    </CurrentEventsStackNavigator.Navigator>
-  );
-}
-
-function PastEventsStack() {
-  return (
-    <PastEventsStackNavigator.Navigator>
-      <PastEventsStackNavigator.Screen
-        name="PastEventsList"
-        component={PastEventsScreen}
-        options={({ navigation }) => ({
-          title: 'Past Events',
-          headerRight: () => (
-            <ProfileHeaderButton
-              onPress={() => navigation.navigate('ProfileScreen')}
-            />
-          ),
-        })}
-      />
-      <PastEventsStackNavigator.Screen
-        name="EventDetail"
-        component={EventDetailScreen}
-        options={{ title: 'Event Details' }}
-        initialParams={{ eventType: 'past' }}
-      />
-      <PastEventsStackNavigator.Screen
-        name="ProfileScreen"
-        component={ProfileScreen}
-        options={{ title: 'Profile' }}
-      />
-    </PastEventsStackNavigator.Navigator>
-  );
-}
 
 function TabNavigation() {
   return (
@@ -88,15 +16,31 @@ function TabNavigation() {
       }}
     >
       <Tab.Screen
-        name="CurrentEvents"
-        component={CurrentEventsStack}
-        options={{ tabBarLabel: 'Current Events' }}
-      />
+        name={Routes[RouteKey.CurrentEventsTab].name}
+        options={{ tabBarLabel: Routes[RouteKey.CurrentEventsTab].label }}
+      >
+        {() => (
+          <EventsStack
+            listScreenName={Routes[RouteKey.CurrentEventsList].name}
+            listComponent={CurrentEventsScreen}
+            title={Routes[RouteKey.CurrentEventsList].title}
+            eventType={Routes[RouteKey.CurrentEventsList].eventType}
+          />
+        )}
+      </Tab.Screen>
       <Tab.Screen
-        name="PastEvents"
-        component={PastEventsStack}
-        options={{ tabBarLabel: 'Past Events' }}
-      />
+        name={Routes[RouteKey.PastEventsTab].name}
+        options={{ tabBarLabel: Routes[RouteKey.PastEventsTab].label }}
+      >
+        {() => (
+          <EventsStack
+            listScreenName={Routes[RouteKey.PastEventsList].name}
+            listComponent={PastEventsScreen}
+            title={Routes[RouteKey.PastEventsList].title}
+            eventType={Routes[RouteKey.PastEventsList].eventType}
+          />
+        )}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 }

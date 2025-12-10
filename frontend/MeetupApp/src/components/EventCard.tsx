@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { getCategoryName, getCategoryIcon } from '../helpers/categories';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { RouteKey, Routes } from '../enums/routes';
 
 const EventCard = ({ event }: { event: Event }) => {
   const navigation = useNavigation();
@@ -12,7 +13,9 @@ const EventCard = ({ event }: { event: Event }) => {
 
   const handlePress = () => {
     // @ts-ignore - navigation types
-    navigation.navigate('EventDetail', { eventId: event.id });
+    navigation.navigate(Routes[RouteKey.EventDetail].name, {
+      eventId: event.id,
+    });
   };
 
   return (
