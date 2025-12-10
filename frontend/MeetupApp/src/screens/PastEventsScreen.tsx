@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import EventList from '../components/EventList';
 import { useEffect, useState } from 'react';
-import { getEvents } from '../../fetching';
+import { getEvents } from '../fetching/fetching';
 import { Event } from '../types/Event';
 
 const PastEventsScreen = () => {

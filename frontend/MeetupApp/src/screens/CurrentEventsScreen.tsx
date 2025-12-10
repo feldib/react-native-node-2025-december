@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import EventList from '../components/EventList';
-import { getEvents } from '../../fetching';
+import { getEvents } from '../fetching/fetching';
 import { useEffect, useState } from 'react';
 import { Event } from '../types/Event';
 

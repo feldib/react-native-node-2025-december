@@ -7,6 +7,11 @@ export class Initial1764777528828 implements MigrationInterface {
     const hashedPassword = await bcrypt.hash("password123", 10);
 
     // Insert categories
+    // 0 - Meetup
+    // 1 - Party
+    // 2 - Sports
+    // 3 - Boardgames
+    // 4 - Walk and Talk
     await queryRunner.query(`
       INSERT INTO categories (name)
       VALUES 
