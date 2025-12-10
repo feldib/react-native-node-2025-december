@@ -1,3 +1,12 @@
+import {
+  faUsers,
+  faGlassCheers,
+  faFootball,
+  faChessPawn,
+  faPersonWalking,
+  IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
+
 export enum CategoryKey {
   Meetup = 'meetup',
   Party = 'party',
@@ -14,33 +23,33 @@ export enum CategoryName {
   WalkAndTalk = 'Walk and Talk',
 }
 
-export enum CategoryIcon {
-  Meetup = 'users',
-  Party = 'glass-cheers',
-  Sports = 'football',
-  Boardgames = 'chess-pawn',
-  WalkAndTalk = 'walk',
-}
+export const CategoryIcons: Record<CategoryKey, IconDefinition> = {
+  [CategoryKey.Meetup]: faUsers,
+  [CategoryKey.Party]: faGlassCheers,
+  [CategoryKey.Sports]: faFootball,
+  [CategoryKey.Boardgames]: faChessPawn,
+  [CategoryKey.WalkAndTalk]: faPersonWalking,
+};
 
 export const Categories = {
   [CategoryKey.Meetup]: {
     name: CategoryName.Meetup,
-    icon: CategoryIcon.Meetup,
+    icon: CategoryIcons[CategoryKey.Meetup],
   },
   [CategoryKey.Party]: {
     name: CategoryName.Party,
-    icon: CategoryIcon.Party,
+    icon: CategoryIcons[CategoryKey.Party],
   },
   [CategoryKey.Sports]: {
     name: CategoryName.Sports,
-    icon: CategoryIcon.Sports,
+    icon: CategoryIcons[CategoryKey.Sports],
   },
   [CategoryKey.Boardgames]: {
     name: CategoryName.Boardgames,
-    icon: CategoryIcon.Boardgames,
+    icon: CategoryIcons[CategoryKey.Boardgames],
   },
   [CategoryKey.WalkAndTalk]: {
     name: CategoryName.WalkAndTalk,
-    icon: CategoryIcon.WalkAndTalk,
+    icon: CategoryIcons[CategoryKey.WalkAndTalk],
   },
 };

@@ -1,4 +1,5 @@
 import { CategoryKey, Categories } from '../enums/categories';
+import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 export const getCategoryName = (category: string): string | undefined => {
   if (
@@ -11,7 +12,9 @@ export const getCategoryName = (category: string): string | undefined => {
   }
 };
 
-export const getCategoryIcon = (category: string): string | undefined => {
+export const getCategoryIcon = (
+  category: string,
+): IconDefinition | undefined => {
   if (
     !category ||
     !Object.values(CategoryKey).includes(category as CategoryKey)

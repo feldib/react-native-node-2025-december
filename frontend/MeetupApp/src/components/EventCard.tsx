@@ -2,10 +2,13 @@ import { StyleSheet, Text, Pressable } from 'react-native';
 import { View } from 'react-native';
 import { Event } from '../types/Event';
 import { useNavigation } from '@react-navigation/native';
-import { getCategoryName } from '../helpers/categories';
+import { getCategoryName, getCategoryIcon } from '../helpers/categories';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const EventCard = ({ event }: { event: Event }) => {
   const navigation = useNavigation();
+  const categoryIcon = getCategoryIcon(event.category);
 
   const handlePress = () => {
     // @ts-ignore - navigation types
@@ -15,8 +18,17 @@ const EventCard = ({ event }: { event: Event }) => {
   return (
     <Pressable onPress={handlePress}>
       <View style={styles.card}>
+        <View style={styles.categoryHeader}>
+          {categoryIcon && (
+            <FontAwesomeIcon
+              icon={categoryIcon as IconProp}
+              size={20}
+              color="#6c7899ff"
+            />
+          )}
+          <Text style={styles.category}>{getCategoryName(event.category)}</Text>
+        </View>
         <Text style={styles.title}>{event.name}</Text>
-        <Text style={styles.category}>{getCategoryName(event.category)}</Text>
         <Text>Start Date: {new Date(event.startDate).toLocaleString()}</Text>
         {event.finishDate !== null && (
           <Text>
@@ -38,6 +50,13 @@ const styles = StyleSheet.create({
     borderColor: '#3f5eadff',
     backgroundColor: 'white',
   },
+  categoryHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    marginBottom: 8,
+  },
   title: {
     fontSize: 22,
     fontWeight: 'bold',
@@ -48,8 +67,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontStyle: 'italic',
     fontWeight: '500',
-    textAlign: 'center',
-    marginBottom: 5,
     color: '#6c7899ff',
   },
 });
