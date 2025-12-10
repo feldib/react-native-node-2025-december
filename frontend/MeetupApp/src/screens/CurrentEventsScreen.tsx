@@ -1,19 +1,16 @@
 import { View } from 'react-native';
 import EventList from '../components/EventList';
-import { getEvents } from '../fetching/fetching';
-import { useEffect, useState } from 'react';
-import { Event } from '../types/Event';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { fetchEvents } from '../store/eventsSlice';
 
 const CurrentEventsScreen = () => {
-  const [currentEvents, setCurrentEvents] = useState<Event[]>([]);
+  const dispatch = useAppDispatch();
+  const { currentEvents } = useAppSelector(state => state.events);
 
   useEffect(() => {
-    getEvents().then(events => {
-      const filtered =
-        events?.filter((event: Event) => event.finishDate === null) || [];
-      setCurrentEvents(filtered);
-    });
-  }, []);
+    dispatch(fetchEvents());
+  }, [dispatch]);
 
   return (
     <View style={styles.container}>

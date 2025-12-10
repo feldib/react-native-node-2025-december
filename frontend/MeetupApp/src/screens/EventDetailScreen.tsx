@@ -6,40 +6,30 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import { useEffect, useState, useMemo, useCallback } from 'react';
-import { Event } from '../types/Event';
-import axios from 'axios';
-import config from '../../config';
+import { useEffect, useMemo, useCallback } from 'react';
 import { getCategoryName, getCategoryIcon } from '../helpers/categories';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { useAppSelector } from '../store/hooks';
+import { useAppSelector, useAppDispatch } from '../store/hooks';
+import {
+  fetchEventById,
+  joinEvent as joinEventAction,
+} from '../store/eventsSlice';
 
 const EventDetailScreen = () => {
   const route = useRoute();
-  const [event, setEvent] = useState<Event | null>(null);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
+  const { displayedEvent: event, isLoading: loading } = useAppSelector(
+    state => state.events,
+  );
 
   // @ts-ignore - route params from navigation
   const { eventId } = route.params;
 
   useEffect(() => {
-    const fetchEvent = async () => {
-      try {
-        const response = await axios.get(
-          `${config.fetching.base}${config.fetching.events}/${eventId}`,
-        );
-        setEvent(response.data);
-      } catch (error) {
-        console.error('Error fetching event:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEvent();
-  }, [eventId]);
+    dispatch(fetchEventById(eventId));
+  }, [eventId, dispatch]);
 
   const userEventRelation = useMemo(
     () => event?.users.find(u => u.userId === user?.id),
@@ -91,19 +81,11 @@ const EventDetailScreen = () => {
     if (!user) return;
 
     try {
-      await axios.post(
-        `${config.fetching.base}${config.fetching.events}/${eventId}/users`,
-        { userId: user.id },
-      );
-      // Refresh event data
-      const response = await axios.get(
-        `${config.fetching.base}${config.fetching.events}/${eventId}`,
-      );
-      setEvent(response.data);
+      await dispatch(joinEventAction({ eventId, userId: user.id })).unwrap();
     } catch (error) {
       console.error('Error joining event:', error);
     }
-  }, [user, eventId]);
+  }, [user, eventId, dispatch]);
 
   if (loading) {
     return (
