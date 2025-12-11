@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { View } from 'react-native';
-import { Event } from '../types/Event';
+import { Event } from '../types/db/Event';
 import EventCard from './EventCard';
 
 const EventList = ({ events }: { events: Event[] }) => {
