@@ -6,10 +6,7 @@ export class Initial1764777528828 implements MigrationInterface {
     // Hash password for test users
     const hashedPassword = await bcrypt.hash("password123", 10);
 
-    // Create category enum type
-    await queryRunner.query(`
-      CREATE TYPE category_enum AS ENUM ('meetup', 'party', 'sports', 'boardgames', 'walk_and_talk')
-    `);
+    // Note: Enum types and tables are created automatically by TypeORM synchronize
 
     // Insert test users
     await queryRunner.query(`

@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { UsersOfEvent } from "./UsersOfEvent";
+import CategoryEnum from "../enums/category";
 
 @Entity("events")
 export class Event {
@@ -21,7 +22,8 @@ export class Event {
   @Column({
     name: "category",
     type: "enum",
-    enum: ["meetup", "party", "sports", "boardgames", "walk_and_talk"],
+    enum: CategoryEnum,
+    nullable: false,
   })
   category: string;
 
