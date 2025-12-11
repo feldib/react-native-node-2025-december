@@ -6,6 +6,7 @@ import {
   OneToMany,
 } from "typeorm";
 import { UsersOfEvent } from "./UsersOfEvent";
+import Gender from "../enums/gender";
 
 @Entity("users")
 export class User {
@@ -30,7 +31,11 @@ export class User {
   @Column()
   age: number;
 
-  @Column({ length: 20 })
+  @Column({
+    type: "enum",
+    enum: Gender,
+    nullable: false,
+  })
   gender: string;
 
   @Column({ type: "text", nullable: true })

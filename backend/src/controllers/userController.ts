@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { AppDataSource } from "../config/database";
 import { User } from "../entities/User";
 import bcrypt from "bcrypt";
+import Gender from "../enums/gender";
 
 const userRepository = AppDataSource.getRepository(User);
 
@@ -47,6 +48,12 @@ export const register = async (req: Request, res: Response) => {
       return res.status(400).json({
         error:
           "First name, last name, email, password, age, and gender are required",
+      });
+    }
+
+    if (!Object.values(Gender).includes(gender)) {
+      return res.status(400).json({
+        error: "Gender must be 'male', 'female', or 'other'",
       });
     }
 

@@ -1,7 +1,8 @@
-import { Text } from '@react-navigation/elements';
 import { Controller, Control, FieldErrors, FieldValues } from 'react-hook-form';
-import { StyleSheet, TextInput } from 'react-native';
 import FormField from '../types/forms/FormField';
+import TextInputField from './TextInputField';
+import RadioInputField from './RadioInputField';
+import { useMemo } from 'react';
 
 type InputFieldsProps<T extends FieldValues> = {
   control: Control<T>;
@@ -14,6 +15,11 @@ const InputFields = <T extends FieldValues>({
   errors,
   formFields,
 }: InputFieldsProps<T>) => {
+  const errorMessageOf = useMemo(() => {
+    return (fieldName: keyof T) => {
+      return errors[fieldName] ? String(errors[fieldName]?.message) : undefined;
+    };
+  }, [errors]);
   return (
     <>
       {formFields.map(field => (
@@ -23,22 +29,21 @@ const InputFields = <T extends FieldValues>({
           name={field.name}
           render={({ field: { onChange, onBlur, value } }) => (
             <>
-              <TextInput
-                style={[styles.input, field.isTextArea && styles.textArea]}
-                placeholder={field.placeholder}
-                value={value?.toString() || ''}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                autoCapitalize={field.autoCapitalize}
-                keyboardType={field.keyboardType}
-                secureTextEntry={field.secureTextEntry}
-                multiline={field.multiline}
-                numberOfLines={field.numberOfLines}
-              />
-              {errors[field.name] && (
-                <Text style={styles.fieldError}>
-                  {String(errors[field.name]?.message)}
-                </Text>
+              {field.type === 'radio' ? (
+                <RadioInputField
+                  field={field}
+                  errorMessage={errorMessageOf(field.name)}
+                  value={value}
+                  onChange={onChange}
+                />
+              ) : (
+                <TextInputField
+                  field={field}
+                  errorMessage={errorMessageOf(field.name)}
+                  value={value}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                />
               )}
             </>
           )}
@@ -47,44 +52,5 @@ const InputFields = <T extends FieldValues>({
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  input: {
-    width: '100%',
-    height: 50,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-    fontSize: 16,
-  },
-  textArea: {
-    height: 100,
-    textAlignVertical: 'top',
-    paddingTop: 15,
-  },
-  button: {
-    width: '100%',
-    height: 50,
-    backgroundColor: '#007AFF',
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  fieldError: {
-    color: 'red',
-    fontSize: 12,
-    marginTop: -10,
-    marginBottom: 10,
-    marginLeft: 5,
-  },
-});
 
 export default InputFields;

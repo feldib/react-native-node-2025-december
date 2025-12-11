@@ -22,7 +22,10 @@ const registerSchema = yup.object().shape({
     .positive('Age must be positive')
     .integer('Age must be an integer')
     .required('Age is required'),
-  gender: yup.string().required('Gender is required'),
+  gender: yup
+    .string()
+    .oneOf(['male', 'female', 'other'], 'Gender must be male, female, or other')
+    .required('Gender is required'),
   description: yup.string().required('Description is required'),
 });
 

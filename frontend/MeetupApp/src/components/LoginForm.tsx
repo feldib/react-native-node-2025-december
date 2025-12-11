@@ -18,14 +18,13 @@ type LoginFormData = yup.InferType<typeof loginSchema>;
 const formFields: FormField<LoginFormData>[] = [
   {
     name: 'email' as const,
+    type: 'email',
     placeholder: 'Email',
-    autoCapitalize: 'none' as const,
-    keyboardType: 'email-address' as const,
   },
   {
     name: 'password' as const,
+    type: 'password',
     placeholder: 'Password',
-    secureTextEntry: true,
   },
 ];
 

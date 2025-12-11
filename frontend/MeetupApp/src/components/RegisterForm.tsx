@@ -13,57 +13,60 @@ import registerSchema from '../schemas/register';
 import { useAppDispatch } from '../store/hooks';
 import InputFields from './InputFields';
 import FormField from '../types/forms/FormField';
+import Gender from '../enums/gender';
 
 type RegisterFormData = yup.InferType<typeof registerSchema>;
 
 const formFields: FormField<RegisterFormData>[] = [
   {
     name: 'firstName' as const,
+    type: 'text',
     placeholder: 'First Name',
-    autoCapitalize: 'words' as const,
   },
   {
     name: 'lastName' as const,
+    type: 'text',
     placeholder: 'Last Name',
-    autoCapitalize: 'words' as const,
   },
   {
     name: 'email' as const,
+    type: 'email',
     placeholder: 'Email',
-    keyboardType: 'email-address' as const,
-    autoCapitalize: 'none' as const,
   },
   {
     name: 'confirmEmail' as const,
+    type: 'email',
     placeholder: 'Confirm Email',
-    keyboardType: 'email-address' as const,
-    autoCapitalize: 'none' as const,
   },
   {
     name: 'password' as const,
+    type: 'password',
     placeholder: 'Password',
-    secureTextEntry: true,
   },
   {
     name: 'confirmPassword' as const,
+    type: 'password',
     placeholder: 'Confirm Password',
-    secureTextEntry: true,
   },
   {
     name: 'age' as const,
+    type: 'number',
     placeholder: 'Age',
-    keyboardType: 'numeric' as const,
   },
   {
     name: 'gender' as const,
+    type: 'radio',
     placeholder: 'Gender',
+    radioOptions: [
+      { label: 'Male', value: Gender.MALE },
+      { label: 'Female', value: Gender.FEMALE },
+      { label: 'Other', value: Gender.OTHER },
+    ],
   },
   {
     name: 'description' as const,
+    type: 'textarea',
     placeholder: 'Description',
-    multiline: true,
-    numberOfLines: 4,
-    isTextArea: true,
   },
 ];
 
@@ -84,7 +87,7 @@ const RegisterForm = ({ isLoading }: { isLoading: boolean }) => {
       password: '',
       confirmPassword: '',
       age: undefined,
-      gender: '',
+      gender: undefined,
       description: '',
     },
   });

@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
   fieldError: {
     color: 'red',
     fontSize: 12,
-    marginTop: -10,
     marginBottom: 10,
     marginLeft: 5,
   },
