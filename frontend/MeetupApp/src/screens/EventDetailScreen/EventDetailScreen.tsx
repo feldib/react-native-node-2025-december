@@ -7,14 +7,14 @@ import {
 } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { useEffect, useMemo, useCallback } from 'react';
-import { getCategoryName, getCategoryIcon } from '../helpers/categories';
+import { getCategoryName, getCategoryIcon } from '../../helpers/categories';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { useAppSelector, useAppDispatch } from '../store/hooks';
+import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import {
   fetchEventById,
   joinEvent as joinEventAction,
-} from '../store/eventsSlice';
+} from '../../store/eventsSlice';
 
 const EventDetailScreen = () => {
   const route = useRoute();

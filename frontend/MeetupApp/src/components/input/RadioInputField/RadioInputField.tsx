@@ -1,6 +1,6 @@
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { FieldValues } from 'react-hook-form';
-import FormField, { RadioFormField } from '../types/forms/FormField';
+import FormField, { RadioFormField } from '@/types/forms/FormField';
 
 type RadioInputFieldProps<T extends FieldValues> = {
   field: FormField<T>;

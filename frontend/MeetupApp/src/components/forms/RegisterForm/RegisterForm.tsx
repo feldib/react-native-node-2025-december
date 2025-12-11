@@ -5,15 +5,15 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import { register } from '../store/authSlice';
+import { register } from '@/store/authSlice';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import registerSchema from '../schemas/register';
-import { useAppDispatch } from '../store/hooks';
-import InputFields from './InputFields';
-import FormField from '../types/forms/FormField';
-import Gender from '../enums/gender';
+import registerSchema from '@/schemas/register';
+import { useAppDispatch } from '@/store/hooks';
+import InputFields from '@/components/input/InputFields/InputFields';
+import FormField from '@/types/forms/FormField';
+import Gender from '@/enums/gender';
 
 type RegisterFormData = yup.InferType<typeof registerSchema>;
 

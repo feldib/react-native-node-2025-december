@@ -1,9 +1,9 @@
-import LoginScreen from '../screens/LoginScreen';
-import RegisterScreen from '../screens/RegisterScreen';
-import CurrentEventsScreen from '../screens/CurrentEventsScreen';
-import PastEventsScreen from '../screens/PastEventsScreen';
-import EventDetailScreen from '../screens/EventDetailScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+import LoginScreen from '@/screens/LoginScreen/LoginScreen';
+import RegisterScreen from '@/screens/RegisterScreen/RegisterScreen';
+import CurrentEventsScreen from '@/screens/CurrentEventsScreen/CurrentEventsScreen';
+import PastEventsScreen from '@/screens/PastEventsScreen/PastEventsScreen';
+import EventDetailScreen from '@/screens/EventDetailScreen/EventDetailScreen';
+import ProfileScreen from '@/screens/ProfileScreen/ProfileScreen';
 
 export type DisplayedEventType = 'current' | 'past';
 

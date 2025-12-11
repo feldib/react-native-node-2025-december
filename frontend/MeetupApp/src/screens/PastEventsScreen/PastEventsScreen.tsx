@@ -1,8 +1,8 @@
 import { View } from 'react-native';
-import EventList from '../components/EventList';
+import EventList from '@/components/event/EventList/EventList';
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { fetchEvents } from '../store/eventsSlice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { fetchEvents } from '@/store/eventsSlice';
 
 const PastEventsScreen = () => {
   const dispatch = useAppDispatch();

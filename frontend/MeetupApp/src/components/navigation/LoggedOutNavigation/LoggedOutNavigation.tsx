@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Routes, RouteKey } from '../enums/routes';
+import { Routes, RouteKey } from '@/enums/routes';
 
 const LoggedOutNavigation = () => {
   const Stack = createNativeStackNavigator();

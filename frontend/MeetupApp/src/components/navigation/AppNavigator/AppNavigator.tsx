@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { useAppSelector } from '../../src/store/hooks';
-import TabNavigation from '../../src/navigation/TabNavigation';
-import LoggedOutNavigation from '../../src/navigation/LoggedOutNavigation';
+import { useAppSelector } from '@/store/hooks';
+import TabNavigation from '@/components/navigation/TabNavigation/TabNavigation';
+import LoggedOutNavigation from '@/components/navigation/LoggedOutNavigation/LoggedOutNavigation';
 
 function AppNavigator() {
   const user = useAppSelector(state => state.auth.user);

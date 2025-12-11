@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { useAppSelector } from '../store/hooks';
-import { RouteKey, Routes } from '../enums/routes';
-import RegisterForm from '../components/RegisterForm';
+import { useAppSelector } from '@/store/hooks';
+import { RouteKey, Routes } from '@/enums/routes';
+import RegisterForm from '@/components/forms/RegisterForm/RegisterForm';
 import { useNavigation } from '@react-navigation/native';
 
 const RegisterScreen = () => {

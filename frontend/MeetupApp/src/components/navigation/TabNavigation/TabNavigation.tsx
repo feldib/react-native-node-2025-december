@@ -1,9 +1,9 @@
-import CurrentEventsScreen from '../screens/CurrentEventsScreen';
-import PastEventsScreen from '../screens/PastEventsScreen';
+import CurrentEventsScreen from '@/screens/CurrentEventsScreen/CurrentEventsScreen';
+import PastEventsScreen from '@/screens/PastEventsScreen/PastEventsScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import EventsStack from './EventsStack';
-import { Routes, RouteKey } from '../enums/routes';
+import EventsStack from '@/components/navigation/EventsStack/EventsStack';
+import { Routes, RouteKey } from '@/enums/routes';
 
 const Tab = createBottomTabNavigator();
 

@@ -1,11 +1,11 @@
 import { StyleSheet, Text, Pressable } from 'react-native';
 import { View } from 'react-native';
-import { Event } from '../types/db/Event';
+import { Event } from '@/types/db/Event';
 import { useNavigation } from '@react-navigation/native';
-import { getCategoryName, getCategoryIcon } from '../helpers/categories';
+import { getCategoryName, getCategoryIcon } from '@/helpers/categories';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { RouteKey, Routes } from '../enums/routes';
+import { RouteKey, Routes } from '@/enums/routes';
 
 const EventCard = ({ event }: { event: Event }) => {
   const navigation = useNavigation();

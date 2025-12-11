@@ -1,6 +1,6 @@
 import { StyleSheet, TextInput, Text } from 'react-native';
 import { FieldValues } from 'react-hook-form';
-import FormField, { TextareaFormField } from '../types/forms/FormField';
+import FormField, { TextareaFormField } from '@/types/forms/FormField';
 import { useMemo } from 'react';
 
 type TextInputFieldProps<T extends FieldValues> = {

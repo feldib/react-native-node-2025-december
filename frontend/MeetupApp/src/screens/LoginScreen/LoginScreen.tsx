@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useAppSelector } from '../store/hooks';
-import { RouteKey, Routes } from '../enums/routes';
-import LoginForm from '../components/LoginForm';
+import { useAppSelector } from '@/store/hooks';
+import { RouteKey, Routes } from '@/enums/routes';
+import LoginForm from '@/components/forms/LoginForm/LoginForm';
 import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {

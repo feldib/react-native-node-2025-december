@@ -1,7 +1,7 @@
 import { Controller, Control, FieldErrors, FieldValues } from 'react-hook-form';
-import FormField from '../types/forms/FormField';
-import TextInputField from './TextInputField';
-import RadioInputField from './RadioInputField';
+import FormField from '@/types/forms/FormField';
+import TextInputField from '@/components/input/TextInputField/TextInputField';
+import RadioInputField from '@/components/input/RadioInputField/RadioInputField';
 import { useMemo } from 'react';
 
 type InputFieldsProps<T extends FieldValues> = {

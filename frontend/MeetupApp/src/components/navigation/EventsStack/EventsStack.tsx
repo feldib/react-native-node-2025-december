@@ -4,7 +4,7 @@ import { faPerson } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { Pressable } from 'react-native';
 import React from 'react';
-import { Routes, RouteKey, DisplayedEventType } from '../enums/routes';
+import { Routes, RouteKey, DisplayedEventType } from '@/enums/routes';
 
 const Stack = createNativeStackNavigator();
 

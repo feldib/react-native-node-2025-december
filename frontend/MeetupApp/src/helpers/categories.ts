@@ -1,4 +1,4 @@
-import { CategoryKey, Categories } from '../enums/categories';
+import { CategoryKey, Categories } from '@/enums/categories';
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 export const getCategoryName = (category: string): string | undefined => {

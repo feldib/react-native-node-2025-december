@@ -4,14 +4,14 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import { useAppDispatch } from '../store/hooks';
-import { login } from '../store/authSlice';
+import { useAppDispatch } from '@/store/hooks';
+import { login } from '@/store/authSlice';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import loginSchema from '../schemas/login';
-import InputFields from './InputFields';
-import FormField from '../types/forms/FormField';
+import loginSchema from '@/schemas/login';
+import InputFields from '@/components/input/InputFields/InputFields';
+import FormField from '@/types/forms/FormField';
 
 type LoginFormData = yup.InferType<typeof loginSchema>;
 
