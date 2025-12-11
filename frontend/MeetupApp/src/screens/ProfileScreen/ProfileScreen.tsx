@@ -7,8 +7,8 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { logout } from '../../store/authSlice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { logout } from '@/store/authSlice';
 
 const ProfileScreen = () => {
   const dispatch = useAppDispatch();

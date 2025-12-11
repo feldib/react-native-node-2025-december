@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { Event } from '@/types/db/Event';
-import { getEvents, getEventById, joinEventApi } from '../fetching/events';
+import { getEvents, getEventById, joinEventApi } from '@/fetching/events';
 
 interface EventsState {
   currentEvents: Event[];
