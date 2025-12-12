@@ -3,11 +3,11 @@ import {
   createEvent,
   getAllEvents,
   getEventById,
+  getUserEventStatus,
   updateEvent,
   deleteEvent,
-  joinEvent,
-  updateEventUser,
   removeEventUser,
+  leaveEvent,
 } from "../controllers/eventController";
 
 const router = Router();
@@ -21,17 +21,17 @@ router.get("/", getAllEvents);
 // Get event by ID
 router.get("/:id", getEventById);
 
+// Get user's status for an event
+router.get("/:id/user-status/:userId", getUserEventStatus);
+
 // Update event
 router.put("/:id", updateEvent);
 
 // Soft delete event
 router.delete("/:id", deleteEvent);
 
-// Join user to event
-router.post("/:id/users", joinEvent);
-
-// Update user's event relationship
-router.put("/:id/users/:userId", updateEventUser);
+// Leave event
+router.put("/:id/users/:userId", leaveEvent);
 
 // Remove user from event
 router.delete("/:id/users/:userId", removeEventUser);

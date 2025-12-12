@@ -1,4 +1,4 @@
-import { UsersOfEvent } from './UsersOfEvent';
+import { User } from './User';
 
 export type Event = {
   id: number;
@@ -11,5 +11,5 @@ export type Event = {
 
   category: string;
 
-  users: UsersOfEvent[];
+  users: User[];
 };

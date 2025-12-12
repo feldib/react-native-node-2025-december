@@ -1,12 +1,36 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { Event } from '@/types/db/Event';
-import { getEvents, getEventById, joinEventApi } from '@/fetching/events';
+import {
+  getEvents,
+  getEventById,
+  joinEventApi,
+  getJoinRequestsApi,
+  setJoinRequestApi,
+  getUserEventStatusApi,
+} from '@/fetching/events';
+
+interface JoinRequest {
+  targetUser: any;
+  totalNecessaryApprovals: number;
+  currentApprovals: number;
+  currentUserApprovalId: number | null;
+  currentUserApprovalStatus: string | null;
+}
+
+interface UserEventStatus {
+  hasRequestedToJoin: boolean;
+  isCreator: boolean;
+  isApproved: boolean;
+  leftEvent: boolean;
+}
 
 interface EventsState {
   currentEvents: Event[];
   pastEvents: Event[];
   displayedCurrentEvent: Event | null;
   displayedPastEvent: Event | null;
+  joinRequests: JoinRequest[];
+  userEventStatus: UserEventStatus | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -16,6 +40,8 @@ const initialState: EventsState = {
   pastEvents: [],
   displayedCurrentEvent: null,
   displayedPastEvent: null,
+  joinRequests: [],
+  userEventStatus: null,
   isLoading: false,
   error: null,
 };
@@ -52,14 +78,82 @@ export const joinEvent = createAsyncThunk(
   'events/join',
   async (
     { eventId, userId }: { eventId: number; userId: number },
-    { rejectWithValue },
+    { rejectWithValue, dispatch },
   ) => {
     try {
       const data = await joinEventApi(eventId, userId);
+      // Refresh user event status after joining
+      dispatch(fetchUserEventStatus({ eventId, userId }));
       return data;
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.error || 'Failed to join event',
+      );
+    }
+  },
+);
+
+export const fetchJoinRequests = createAsyncThunk(
+  'events/fetchJoinRequests',
+  async (
+    { eventId, currentUserId }: { eventId: number; currentUserId: number },
+    { rejectWithValue },
+  ) => {
+    try {
+      const data = await getJoinRequestsApi(eventId, currentUserId);
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.error || 'Failed to fetch join requests',
+      );
+    }
+  },
+);
+
+export const setJoinRequestStatus = createAsyncThunk(
+  'events/setJoinRequestStatus',
+  async (
+    {
+      eventId,
+      approverUserId,
+      targetUserId,
+      status,
+    }: {
+      eventId: number;
+      approverUserId: number;
+      targetUserId: number;
+      status: 'approved' | 'rejected' | 'pending';
+    },
+    { rejectWithValue },
+  ) => {
+    try {
+      const data = await setJoinRequestApi(
+        eventId,
+        approverUserId,
+        targetUserId,
+        status,
+      );
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.error || 'Failed to set join request status',
+      );
+    }
+  },
+);
+
+export const fetchUserEventStatus = createAsyncThunk(
+  'events/fetchUserEventStatus',
+  async (
+    { eventId, userId }: { eventId: number; userId: number },
+    { rejectWithValue },
+  ) => {
+    try {
+      const data = await getUserEventStatusApi(eventId, userId);
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.error || 'Failed to fetch user event status',
       );
     }
   },
@@ -165,6 +259,53 @@ const eventsSlice = createSlice({
       },
     );
     builder.addCase(joinEvent.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload as string;
+    });
+
+    // Fetch join requests
+    builder.addCase(fetchJoinRequests.pending, state => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(
+      fetchJoinRequests.fulfilled,
+      (state, action: PayloadAction<JoinRequest[]>) => {
+        state.isLoading = false;
+        state.joinRequests = action.payload;
+      },
+    );
+    builder.addCase(fetchJoinRequests.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload as string;
+    });
+
+    // Set join request status
+    builder.addCase(setJoinRequestStatus.pending, state => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(setJoinRequestStatus.fulfilled, state => {
+      state.isLoading = false;
+    });
+    builder.addCase(setJoinRequestStatus.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload as string;
+    });
+
+    // Fetch user event status
+    builder.addCase(fetchUserEventStatus.pending, state => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(
+      fetchUserEventStatus.fulfilled,
+      (state, action: PayloadAction<UserEventStatus>) => {
+        state.isLoading = false;
+        state.userEventStatus = action.payload;
+      },
+    );
+    builder.addCase(fetchUserEventStatus.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload as string;
     });

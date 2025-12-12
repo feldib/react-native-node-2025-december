@@ -14,7 +14,9 @@ import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import {
   fetchEventById,
   joinEvent as joinEventAction,
+  fetchUserEventStatus,
 } from '@/store/eventsSlice';
+import UserIconSection from '@/components/event/UserIconSection/UserIconSection';
 
 const EventDetailScreen = () => {
   const route = useRoute();
@@ -23,6 +25,7 @@ const EventDetailScreen = () => {
   const {
     displayedCurrentEvent,
     displayedPastEvent,
+    userEventStatus,
     isLoading: loading,
   } = useAppSelector(state => state.events);
 
@@ -42,21 +45,23 @@ const EventDetailScreen = () => {
     dispatch(fetchEventById(eventId));
   }, [eventId, dispatch]);
 
-  const userEventRelation = useMemo(
-    () => event?.users.find(u => u.userId === user?.id),
-    [event?.users, user?.id],
-  );
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchUserEventStatus({ eventId, userId: user.id }));
+    }
+  }, [eventId, user, dispatch]);
 
   const isCreator = useMemo(
-    () => userEventRelation?.isCreator || false,
-    [userEventRelation],
+    () => userEventStatus?.isCreator || false,
+    [userEventStatus],
   );
-
-  const isJoined = useMemo(() => !!userEventRelation, [userEventRelation]);
-
+  const hasRequestedToJoin = useMemo(
+    () => userEventStatus?.hasRequestedToJoin || false,
+    [userEventStatus],
+  );
   const isApproved = useMemo(
-    () => userEventRelation?.isApproved || false,
-    [userEventRelation],
+    () => userEventStatus?.isApproved || false,
+    [userEventStatus],
   );
 
   const buttonConfig = useMemo(() => {
@@ -67,14 +72,14 @@ const EventDetailScreen = () => {
         style: styles.creatorButton,
       };
     }
-    if (isJoined && isApproved) {
+    if (hasRequestedToJoin && isApproved) {
       return {
         text: 'Joined',
         disabled: true,
         style: styles.joinedButton,
       };
     }
-    if (isJoined && !isApproved) {
+    if (hasRequestedToJoin && !isApproved) {
       return {
         text: 'Waiting for approval',
         disabled: true,
@@ -86,7 +91,7 @@ const EventDetailScreen = () => {
       disabled: false,
       style: styles.joinButton,
     };
-  }, [isCreator, isJoined, isApproved]);
+  }, [isCreator, hasRequestedToJoin, isApproved]);
 
   const handleJoin = useCallback(async () => {
     if (!user) return;
@@ -132,7 +137,7 @@ const EventDetailScreen = () => {
         <Text style={styles.title}>{event.name}</Text>
         <Text>Start Date: {new Date(event.startDate).toLocaleString()}</Text>
         {finishDate && <Text>Finish date: {finishDate.toLocaleString()}</Text>}
-        <Text>Users: {event.users.length}</Text>
+        <UserIconSection users={event.users} />
 
         {!finishDate ? (
           <TouchableOpacity
