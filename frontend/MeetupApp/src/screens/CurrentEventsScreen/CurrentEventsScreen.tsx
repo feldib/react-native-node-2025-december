@@ -14,7 +14,7 @@ const CurrentEventsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <EventList events={currentEvents} />
+      <EventList events={currentEvents} eventType="current" />
     </View>
   );
 };

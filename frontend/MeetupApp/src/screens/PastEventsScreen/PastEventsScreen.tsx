@@ -14,7 +14,7 @@ const PastEventsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <EventList events={pastEvents} />
+      <EventList events={pastEvents} eventType="past" />
     </View>
   );
 };

@@ -1,16 +1,18 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAppSelector } from '@/store/hooks';
 import { RouteKey, Routes } from '@/enums/routes';
+import { LoggedOutStackParamList } from '@/components/navigation/LoggedOutNavigation/LoggedOutNavigation';
 import RegisterForm from '@/components/forms/RegisterForm/RegisterForm';
-import { useNavigation } from '@react-navigation/native';
 
 const RegisterScreen = () => {
   const { isLoading, error } = useAppSelector(state => state.auth);
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<LoggedOutStackParamList>>();
 
   const handlePress = () => {
-    // @ts-ignore - navigation types
     navigation.navigate(Routes[RouteKey.Login].name);
   };
 

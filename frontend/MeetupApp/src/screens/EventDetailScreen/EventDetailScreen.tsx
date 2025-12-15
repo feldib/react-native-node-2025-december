@@ -5,21 +5,23 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import { useRoute } from '@react-navigation/native';
-import { useEffect, useMemo, useCallback } from 'react';
+import { StaticScreenProps } from '@react-navigation/native';
+import { useEffect, useMemo } from 'react';
 import { getCategoryName, getCategoryIcon } from '@/helpers/categories';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
-import {
-  fetchEventById,
-  joinEvent as joinEventAction,
-  fetchUserEventStatus,
-} from '@/store/eventsSlice';
+import { fetchEventById, fetchUserEventStatus } from '@/store/eventsSlice';
 import UserIconSection from '@/components/event/UserIconSection/UserIconSection';
+import { DisplayedEventType } from '@/enums/routes';
+import useJoinButton from './useJoinButton';
 
-const EventDetailScreen = () => {
-  const route = useRoute();
+type EventDetailScreenProps = StaticScreenProps<{
+  eventId: number;
+  eventType: DisplayedEventType;
+}>;
+
+const EventDetailScreen = ({ route }: EventDetailScreenProps) => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
   const {
@@ -29,7 +31,6 @@ const EventDetailScreen = () => {
     isLoading: loading,
   } = useAppSelector(state => state.events);
 
-  // @ts-ignore - route params from navigation
   const { eventId, eventType } = route.params;
 
   const event = useMemo(() => {
@@ -46,62 +47,18 @@ const EventDetailScreen = () => {
   }, [eventId, dispatch]);
 
   useEffect(() => {
-    if (user) {
+    // Only fetch user event status for current events, not past events
+    if (user && eventType === 'current') {
       dispatch(fetchUserEventStatus({ eventId, userId: user.id }));
     }
-  }, [eventId, user, dispatch]);
+  }, [eventId, user, eventType, dispatch]);
 
-  const isCreator = useMemo(
-    () => userEventStatus?.isCreator || false,
-    [userEventStatus],
-  );
-  const hasRequestedToJoin = useMemo(
-    () => userEventStatus?.hasRequestedToJoin || false,
-    [userEventStatus],
-  );
-  const isApproved = useMemo(
-    () => userEventStatus?.isApproved || false,
-    [userEventStatus],
-  );
-
-  const buttonConfig = useMemo(() => {
-    if (isCreator) {
-      return {
-        text: "You're the creator",
-        disabled: true,
-        style: styles.creatorButton,
-      };
-    }
-    if (hasRequestedToJoin && isApproved) {
-      return {
-        text: 'Joined',
-        disabled: true,
-        style: styles.joinedButton,
-      };
-    }
-    if (hasRequestedToJoin && !isApproved) {
-      return {
-        text: 'Waiting for approval',
-        disabled: true,
-        style: styles.pendingButton,
-      };
-    }
-    return {
-      text: 'Join',
-      disabled: false,
-      style: styles.joinButton,
-    };
-  }, [isCreator, hasRequestedToJoin, isApproved]);
-
-  const handleJoin = useCallback(async () => {
-    if (!user) return;
-
-    try {
-      await dispatch(joinEventAction({ eventId, userId: user.id })).unwrap();
-    } catch (error) {
-      console.error('Error joining event:', error);
-    }
-  }, [user, eventId, dispatch]);
+  const { buttonConfig, handleJoin } = useJoinButton({
+    userEventStatus,
+    eventId,
+    user,
+    dispatch,
+  });
 
   if (loading) {
     return (
@@ -136,10 +93,12 @@ const EventDetailScreen = () => {
         </View>
         <Text style={styles.title}>{event.name}</Text>
         <Text>Start Date: {new Date(event.startDate).toLocaleString()}</Text>
-        {finishDate && <Text>Finish date: {finishDate.toLocaleString()}</Text>}
+        {eventType === 'past' && (
+          <Text>Finish date: {finishDate.toLocaleString()}</Text>
+        )}
         <UserIconSection users={event.users} />
 
-        {!finishDate ? (
+        {eventType === 'current' ? (
           <TouchableOpacity
             style={[styles.button, buttonConfig.style]}
             disabled={buttonConfig.disabled}
@@ -197,18 +156,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#fff',
-  },
-  joinButton: {
-    backgroundColor: '#007AFF',
-  },
-  creatorButton: {
-    backgroundColor: '#6c757d',
-  },
-  joinedButton: {
-    backgroundColor: '#28a745',
-  },
-  pendingButton: {
-    backgroundColor: '#ffc107',
   },
 });
 

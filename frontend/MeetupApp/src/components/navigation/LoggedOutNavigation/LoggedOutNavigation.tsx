@@ -1,8 +1,14 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Routes, RouteKey } from '@/enums/routes';
+import { Routes, RouteKey, RouteName } from '@/enums/routes';
+
+export type LoggedOutStackParamList = {
+  [RouteName.Login]: undefined;
+  [RouteName.Register]: undefined;
+};
+
+const Stack = createNativeStackNavigator<LoggedOutStackParamList>();
 
 const LoggedOutNavigation = () => {
-  const Stack = createNativeStackNavigator();
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen

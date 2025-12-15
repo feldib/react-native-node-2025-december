@@ -9,6 +9,24 @@ jest.mock('@/helpers/categories', () => ({
   getCategoryIcon: () => 'icon',
 }));
 
+jest.mock('@/components/event/UserIconSection/UserIconSection', () => {
+  return function MockUserIconSection() {
+    return null;
+  };
+});
+
+jest.mock('@/screens/EventDetailScreen/useJoinButton', () => ({
+  __esModule: true,
+  default: () => ({
+    buttonConfig: {
+      text: 'Join',
+      disabled: false,
+      style: {},
+    },
+    handleJoin: jest.fn(),
+  }),
+}));
+
 jest.mock('@/store/hooks', () => ({
   useAppDispatch: () => jest.fn(),
   useAppSelector: (selector: any) =>
@@ -23,7 +41,15 @@ jest.mock('@/store/hooks', () => ({
           finishDate: null,
           users: [],
         },
-        displayedPastEvent: null,
+        displayedPastEvent: {
+          id: 2,
+          name: 'Past Event',
+          category: 'tech',
+          startDate: new Date().toISOString(),
+          finishDate: new Date().toISOString(),
+          users: [],
+        },
+        userEventStatus: null,
         isLoading: false,
       },
     }),
@@ -31,19 +57,31 @@ jest.mock('@/store/hooks', () => ({
 
 jest.mock('@/store/eventsSlice', () => ({
   fetchEventById: (id: number) => ({ type: 'events/fetchById', payload: id }),
+  fetchUserEventStatus: (params: any) => ({
+    type: 'events/fetchUserEventStatus',
+    payload: params,
+  }),
 }));
-
-jest.mock('@react-navigation/native', () => {
-  const actual = jest.requireActual('@react-navigation/native');
-  return {
-    ...actual,
-    useRoute: () => ({ params: { eventId: 1, eventType: 'current' } }),
-  };
-});
 
 import EventDetailScreen from '@/screens/EventDetailScreen/EventDetailScreen';
 import { render } from '@testing-library/react-native';
 
-test('EventDetailScreen renders', async () => {
-  render(<EventDetailScreen />);
+test('EventDetailScreen renders current event with button', async () => {
+  const { getByText } = render(
+    <EventDetailScreen
+      route={{ params: { eventId: 1, eventType: 'current' } } as any}
+    />,
+  );
+
+  expect(getByText('Event')).toBeTruthy();
+});
+
+test('EventDetailScreen renders past event without button', async () => {
+  const { getByText, queryByText } = render(
+    <EventDetailScreen
+      route={{ params: { eventId: 2, eventType: 'past' } } as any}
+    />,
+  );
+
+  expect(getByText('Past Event')).toBeTruthy();
 });

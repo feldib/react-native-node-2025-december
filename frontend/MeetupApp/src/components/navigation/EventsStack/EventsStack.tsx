@@ -4,9 +4,28 @@ import { faPerson } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { Pressable } from 'react-native';
 import React from 'react';
-import { Routes, RouteKey, DisplayedEventType } from '@/enums/routes';
+import {
+  Routes,
+  RouteKey,
+  DisplayedEventType,
+  RouteName,
+} from '@/enums/routes';
 
-const Stack = createNativeStackNavigator();
+export type EventsStackParamList = {
+  [RouteName.EventDetail]: { eventId: number; eventType: DisplayedEventType };
+  [RouteName.Profile]: undefined;
+  [RouteName.CurrentEventsList]: undefined;
+  [RouteName.PastEventsList]: undefined;
+};
+
+interface EventsStackProps {
+  listScreenName: RouteName.CurrentEventsList | RouteName.PastEventsList;
+  listComponent: React.ComponentType<any>;
+  title: string;
+  eventType: DisplayedEventType;
+}
+
+const Stack = createNativeStackNavigator<EventsStackParamList>();
 
 const ProfileHeaderButton = React.memo(
   ({ onPress }: { onPress: () => void }) => (
@@ -19,13 +38,6 @@ const ProfileHeaderButton = React.memo(
     </Pressable>
   ),
 );
-
-interface EventsStackProps {
-  listScreenName: string;
-  listComponent: React.ComponentType<any>;
-  title: string;
-  eventType: DisplayedEventType;
-}
 
 export default function EventsStack({
   listScreenName,

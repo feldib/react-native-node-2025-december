@@ -17,7 +17,7 @@ interface JoinRequest {
   currentUserApprovalStatus: string | null;
 }
 
-interface UserEventStatus {
+export interface UserEventStatus {
   hasRequestedToJoin: boolean;
   isCreator: boolean;
   isApproved: boolean;

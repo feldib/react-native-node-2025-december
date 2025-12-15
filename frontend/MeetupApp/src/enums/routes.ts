@@ -18,7 +18,7 @@ export enum RouteKey {
   Profile = 'profile',
 }
 
-enum RouteName {
+export enum RouteName {
   Login = 'Login',
   Register = 'Register',
   CurrentEventsTab = 'CurrentEvents',
@@ -43,42 +43,42 @@ enum RouteLabel {
 
 export const Routes = {
   [RouteKey.Login]: {
-    name: RouteName.Login,
+    name: RouteName.Login as const,
     component: LoginScreen,
   },
   [RouteKey.Register]: {
-    name: RouteName.Register,
+    name: RouteName.Register as const,
     component: RegisterScreen,
   },
   [RouteKey.CurrentEventsTab]: {
-    name: RouteName.CurrentEventsTab,
+    name: RouteName.CurrentEventsTab as const,
     label: RouteLabel.CurrentEvents,
     component: CurrentEventsScreen,
   },
   [RouteKey.PastEventsTab]: {
-    name: RouteName.PastEventsTab,
+    name: RouteName.PastEventsTab as const,
     label: RouteLabel.PastEvents,
     component: PastEventsScreen,
   },
   [RouteKey.CurrentEventsList]: {
-    name: RouteName.CurrentEventsList,
+    name: RouteName.CurrentEventsList as const,
     title: RouteTitle.CurrentEvents,
     component: CurrentEventsScreen,
     eventType: 'current' as DisplayedEventType,
   },
   [RouteKey.PastEventsList]: {
-    name: RouteName.PastEventsList,
+    name: RouteName.PastEventsList as const,
     title: RouteTitle.PastEvents,
     component: PastEventsScreen,
     eventType: 'past' as DisplayedEventType,
   },
   [RouteKey.EventDetail]: {
-    name: RouteName.EventDetail,
+    name: RouteName.EventDetail as const,
     title: RouteTitle.EventDetails,
     component: EventDetailScreen,
   },
   [RouteKey.Profile]: {
-    name: RouteName.Profile,
+    name: RouteName.Profile as const,
     title: RouteTitle.Profile,
     component: ProfileScreen,
   },

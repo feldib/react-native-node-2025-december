@@ -3,9 +3,14 @@ import PastEventsScreen from '@/screens/PastEventsScreen/PastEventsScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import EventsStack from '@/components/navigation/EventsStack/EventsStack';
-import { Routes, RouteKey } from '@/enums/routes';
+import { Routes, RouteKey, RouteName } from '@/enums/routes';
 
-const Tab = createBottomTabNavigator();
+export type TabNavigationParamList = {
+  [RouteName.CurrentEventsTab]: undefined;
+  [RouteName.PastEventsTab]: undefined;
+};
+
+const Tab = createBottomTabNavigator<TabNavigationParamList>();
 
 function TabNavigation() {
   return (

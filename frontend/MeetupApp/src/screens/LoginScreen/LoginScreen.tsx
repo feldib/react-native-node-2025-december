@@ -1,15 +1,17 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAppSelector } from '@/store/hooks';
 import { RouteKey, Routes } from '@/enums/routes';
+import { LoggedOutStackParamList } from '@/components/navigation/LoggedOutNavigation/LoggedOutNavigation';
 import LoginForm from '@/components/forms/LoginForm/LoginForm';
-import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
   const { isLoading, error } = useAppSelector(state => state.auth);
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<LoggedOutStackParamList>>();
 
   const handlePress = () => {
-    // @ts-ignore - navigation types
     navigation.navigate(Routes[RouteKey.Register].name);
   };
 
