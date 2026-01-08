@@ -77,7 +77,7 @@ test('EventDetailScreen renders current event with button', async () => {
 });
 
 test('EventDetailScreen renders past event without button', async () => {
-  const { getByText, queryByText } = render(
+  const { getByText } = render(
     <EventDetailScreen
       route={{ params: { eventId: 2, eventType: 'past' } } as any}
     />,
