@@ -1,9 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAppSelector } from '@/store/hooks';
 import { RouteKey, Routes } from '@/enums/routes';
-import { LoggedOutStackParamList } from '@/components/navigation/LoggedOutNavigation/LoggedOutNavigation';
 import LoginForm from '@/components/forms/LoginForm/LoginForm';
 import { useTheme } from '@/theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
@@ -12,8 +10,7 @@ const LoginScreen = () => {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const { isLoading, error } = useAppSelector(state => state.auth);
-  const navigation =
-    useNavigation<NativeStackNavigationProp<LoggedOutStackParamList>>();
+  const navigation = useNavigation();
 
   const handlePress = () => {
     navigation.navigate(Routes[RouteKey.Register].name);

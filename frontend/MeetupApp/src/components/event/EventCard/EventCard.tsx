@@ -2,13 +2,11 @@ import { StyleSheet, Text, Pressable } from 'react-native';
 import { View } from 'react-native';
 import { Event } from '@/types/db/Event';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { getCategoryName, getCategoryIcon } from '@/helpers/categories';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { RouteKey, Routes, DisplayedEventType } from '@/enums/routes';
 import UserIconSection from '@/components/event/UserIconSection/UserIconSection';
-import { EventsStackParamList } from '@/components/navigation/EventsStack/EventsStack';
 import { useTheme } from '@/theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
 
@@ -21,8 +19,7 @@ const EventCard = ({
 }) => {
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const navigation =
-    useNavigation<NativeStackNavigationProp<EventsStackParamList>>();
+  const navigation = useNavigation();
   const categoryIcon = getCategoryIcon(event.category);
 
   const handlePress = () => {
