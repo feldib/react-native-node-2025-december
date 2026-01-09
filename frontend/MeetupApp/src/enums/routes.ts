@@ -29,13 +29,6 @@ export enum RouteName {
   Profile = 'ProfileScreen',
 }
 
-enum RouteTitle {
-  CurrentEvents = 'Current Events',
-  PastEvents = 'Past Events',
-  EventDetails = 'Event Details',
-  Profile = 'Profile',
-}
-
 enum RouteLabel {
   CurrentEvents = 'Current Events',
   PastEvents = 'Past Events',
@@ -62,24 +55,20 @@ export const Routes = {
   },
   [RouteKey.CurrentEventsList]: {
     name: RouteName.CurrentEventsList as const,
-    title: RouteTitle.CurrentEvents,
     component: CurrentEventsScreen,
     eventType: 'current' as DisplayedEventType,
   },
   [RouteKey.PastEventsList]: {
     name: RouteName.PastEventsList as const,
-    title: RouteTitle.PastEvents,
     component: PastEventsScreen,
     eventType: 'past' as DisplayedEventType,
   },
   [RouteKey.EventDetail]: {
     name: RouteName.EventDetail as const,
-    title: RouteTitle.EventDetails,
     component: EventDetailScreen,
   },
   [RouteKey.Profile]: {
     name: RouteName.Profile as const,
-    title: RouteTitle.Profile,
     component: ProfileScreen,
   },
 };

@@ -5,6 +5,7 @@ import {
 import { User } from '@/types/db/User';
 import { useCallback, useMemo } from 'react';
 import { useTheme } from '@/theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 import { AppDispatch } from '@/store/store';
 
 const useJoinButton = ({
@@ -19,6 +20,7 @@ const useJoinButton = ({
   dispatch: AppDispatch;
 }) => {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const isCreator = useMemo(
     () => userEventStatus?.isCreator || false,
     [userEventStatus],
@@ -35,7 +37,7 @@ const useJoinButton = ({
   const buttonConfig = useMemo(() => {
     if (isCreator) {
       return {
-        text: "You're the creator",
+        text: t('events.youAreCreator'),
         disabled: true,
         style: {
           backgroundColor: colors.buttonSecondary,
@@ -44,24 +46,24 @@ const useJoinButton = ({
     }
     if (hasRequestedToJoin && isApproved) {
       return {
-        text: 'Joined',
+        text: t('events.joined'),
         disabled: true,
         style: { backgroundColor: colors.success },
       };
     }
     if (hasRequestedToJoin && !isApproved) {
       return {
-        text: 'Waiting for approval',
+        text: t('events.waitingApproval'),
         disabled: true,
         style: { backgroundColor: colors.warning },
       };
     }
     return {
-      text: 'Join',
+      text: t('events.join'),
       disabled: false,
       style: { backgroundColor: colors.accent },
     };
-  }, [isCreator, hasRequestedToJoin, isApproved, colors]);
+  }, [isCreator, hasRequestedToJoin, isApproved, colors, t]);
 
   const handleJoin = useCallback(async () => {
     if (!user) return;

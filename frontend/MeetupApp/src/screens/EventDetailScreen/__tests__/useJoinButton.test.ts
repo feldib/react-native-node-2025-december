@@ -15,7 +15,7 @@ describe('useJoinButton', () => {
       }),
     );
 
-    expect(result.current.buttonConfig.text).toBe('Join');
+    expect(result.current.buttonConfig.text).toBe('events.join');
     expect(result.current.buttonConfig.disabled).toBe(false);
   });
 
@@ -34,7 +34,7 @@ describe('useJoinButton', () => {
       }),
     );
 
-    expect(result.current.buttonConfig.text).toBe("You're the creator");
+    expect(result.current.buttonConfig.text).toBe('events.youAreCreator');
     expect(result.current.buttonConfig.disabled).toBe(true);
   });
 
@@ -53,7 +53,7 @@ describe('useJoinButton', () => {
       }),
     );
 
-    expect(result.current.buttonConfig.text).toBe('Joined');
+    expect(result.current.buttonConfig.text).toBe('events.joined');
     expect(result.current.buttonConfig.disabled).toBe(true);
   });
 
@@ -72,7 +72,7 @@ describe('useJoinButton', () => {
       }),
     );
 
-    expect(result.current.buttonConfig.text).toBe('Waiting for approval');
+    expect(result.current.buttonConfig.text).toBe('events.waitingApproval');
     expect(result.current.buttonConfig.disabled).toBe(true);
   });
 

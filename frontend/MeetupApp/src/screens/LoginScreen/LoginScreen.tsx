@@ -6,9 +6,11 @@ import { RouteKey, Routes } from '@/enums/routes';
 import { LoggedOutStackParamList } from '@/components/navigation/LoggedOutNavigation/LoggedOutNavigation';
 import LoginForm from '@/components/forms/LoginForm/LoginForm';
 import { useTheme } from '@/theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 const LoginScreen = () => {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const { isLoading, error } = useAppSelector(state => state.auth);
   const navigation =
     useNavigation<NativeStackNavigationProp<LoggedOutStackParamList>>();
@@ -19,7 +21,9 @@ const LoginScreen = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.title, { color: colors.textTitle }]}>Login</Text>
+      <Text style={[styles.title, { color: colors.textTitle }]}>
+        {t('auth.login')}
+      </Text>
 
       {error && (
         <Text style={[styles.error, { color: colors.textError }]}>{error}</Text>
@@ -29,7 +33,7 @@ const LoginScreen = () => {
 
       <TouchableOpacity style={styles.linkButton} onPress={handlePress}>
         <Text style={[styles.linkText, { color: colors.textLink }]}>
-          Don't have an account? Register
+          {t('auth.dontHaveAccount')}
         </Text>
       </TouchableOpacity>
     </View>

@@ -15,64 +15,13 @@ import InputFields from '@/components/input/InputFields/InputFields';
 import FormField from '@/types/forms/FormField';
 import Gender from '@/enums/gender';
 import { useTheme } from '@/theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 type RegisterFormData = yup.InferType<typeof registerSchema>;
 
-const formFields: FormField<RegisterFormData>[] = [
-  {
-    name: 'firstName' as const,
-    type: 'text',
-    placeholder: 'First Name',
-  },
-  {
-    name: 'lastName' as const,
-    type: 'text',
-    placeholder: 'Last Name',
-  },
-  {
-    name: 'email' as const,
-    type: 'email',
-    placeholder: 'Email',
-  },
-  {
-    name: 'confirmEmail' as const,
-    type: 'email',
-    placeholder: 'Confirm Email',
-  },
-  {
-    name: 'password' as const,
-    type: 'password',
-    placeholder: 'Password',
-  },
-  {
-    name: 'confirmPassword' as const,
-    type: 'password',
-    placeholder: 'Confirm Password',
-  },
-  {
-    name: 'age' as const,
-    type: 'number',
-    placeholder: 'Age',
-  },
-  {
-    name: 'gender' as const,
-    type: 'radio',
-    placeholder: 'Gender',
-    radioOptions: [
-      { label: 'Male', value: Gender.MALE },
-      { label: 'Female', value: Gender.FEMALE },
-      { label: 'Other', value: Gender.OTHER },
-    ],
-  },
-  {
-    name: 'description' as const,
-    type: 'textarea',
-    placeholder: 'Description',
-  },
-];
-
 const RegisterForm = ({ isLoading }: { isLoading: boolean }) => {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const {
@@ -108,6 +57,59 @@ const RegisterForm = ({ isLoading }: { isLoading: boolean }) => {
     );
   };
 
+  const formFields: FormField<RegisterFormData>[] = [
+    {
+      name: 'firstName' as const,
+      type: 'text',
+      placeholder: t('auth.firstName'),
+    },
+    {
+      name: 'lastName' as const,
+      type: 'text',
+      placeholder: t('auth.lastName'),
+    },
+    {
+      name: 'email' as const,
+      type: 'email',
+      placeholder: t('auth.email'),
+    },
+    {
+      name: 'confirmEmail' as const,
+      type: 'email',
+      placeholder: t('auth.confirmEmail'),
+    },
+    {
+      name: 'password' as const,
+      type: 'password',
+      placeholder: t('auth.password'),
+    },
+    {
+      name: 'confirmPassword' as const,
+      type: 'password',
+      placeholder: t('auth.confirmPassword'),
+    },
+    {
+      name: 'age' as const,
+      type: 'number',
+      placeholder: t('auth.age'),
+    },
+    {
+      name: 'gender' as const,
+      type: 'radio',
+      placeholder: t('auth.gender'),
+      radioOptions: [
+        { label: t('auth.male'), value: Gender.MALE },
+        { label: t('auth.female'), value: Gender.FEMALE },
+        { label: t('auth.other'), value: Gender.OTHER },
+      ],
+    },
+    {
+      name: 'description' as const,
+      type: 'textarea',
+      placeholder: t('auth.description'),
+    },
+  ];
+
   return (
     <>
       <InputFields control={control} errors={errors} formFields={formFields} />
@@ -123,7 +125,7 @@ const RegisterForm = ({ isLoading }: { isLoading: boolean }) => {
           <Text
             style={[styles.buttonText, { color: colors.buttonPrimaryText }]}
           >
-            Register
+            {t('auth.register')}
           </Text>
         )}
       </TouchableOpacity>

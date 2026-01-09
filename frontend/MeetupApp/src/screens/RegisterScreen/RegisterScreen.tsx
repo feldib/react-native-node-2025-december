@@ -7,9 +7,11 @@ import { RouteKey, Routes } from '@/enums/routes';
 import { LoggedOutStackParamList } from '@/components/navigation/LoggedOutNavigation/LoggedOutNavigation';
 import RegisterForm from '@/components/forms/RegisterForm/RegisterForm';
 import { useTheme } from '@/theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 const RegisterScreen = () => {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const { isLoading, error } = useAppSelector(state => state.auth);
   const navigation =
     useNavigation<NativeStackNavigationProp<LoggedOutStackParamList>>();
@@ -26,7 +28,7 @@ const RegisterScreen = () => {
       ]}
     >
       <Text style={[styles.title, { color: colors.textTitle }]}>
-        Create Account
+        {t('auth.createAccount')}
       </Text>
 
       {error && (
@@ -37,7 +39,7 @@ const RegisterScreen = () => {
 
       <TouchableOpacity style={styles.linkButton} onPress={handlePress}>
         <Text style={[styles.linkText, { color: colors.textLink }]}>
-          Already have an account? Login
+          {t('auth.alreadyHaveAccount')}
         </Text>
       </TouchableOpacity>
     </ScrollView>

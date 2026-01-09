@@ -13,24 +13,13 @@ import loginSchema from '@/schemas/login';
 import InputFields from '@/components/input/InputFields/InputFields';
 import FormField from '@/types/forms/FormField';
 import { useTheme } from '@/theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 type LoginFormData = yup.InferType<typeof loginSchema>;
 
-const formFields: FormField<LoginFormData>[] = [
-  {
-    name: 'email' as const,
-    type: 'email',
-    placeholder: 'Email',
-  },
-  {
-    name: 'password' as const,
-    type: 'password',
-    placeholder: 'Password',
-  },
-];
-
 const LoginForm = ({ isLoading }: { isLoading: boolean }) => {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const {
@@ -49,6 +38,19 @@ const LoginForm = ({ isLoading }: { isLoading: boolean }) => {
     await dispatch(login({ email: data.email, password: data.password }));
   };
 
+  const formFields: FormField<LoginFormData>[] = [
+    {
+      name: 'email' as const,
+      type: 'email',
+      placeholder: t('auth.email'),
+    },
+    {
+      name: 'password' as const,
+      type: 'password',
+      placeholder: t('auth.password'),
+    },
+  ];
+
   return (
     <>
       <InputFields control={control} errors={errors} formFields={formFields} />
@@ -64,7 +66,7 @@ const LoginForm = ({ isLoading }: { isLoading: boolean }) => {
           <Text
             style={[styles.buttonText, { color: colors.buttonPrimaryText }]}
           >
-            Login
+            {t('auth.login')}
           </Text>
         )}
       </TouchableOpacity>

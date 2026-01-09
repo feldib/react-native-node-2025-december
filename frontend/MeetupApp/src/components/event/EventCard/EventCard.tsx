@@ -10,6 +10,7 @@ import { RouteKey, Routes, DisplayedEventType } from '@/enums/routes';
 import UserIconSection from '@/components/event/UserIconSection/UserIconSection';
 import { EventsStackParamList } from '@/components/navigation/EventsStack/EventsStack';
 import { useTheme } from '@/theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 const EventCard = ({
   event,
@@ -19,6 +20,7 @@ const EventCard = ({
   eventType: DisplayedEventType;
 }) => {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<EventsStackParamList>>();
   const categoryIcon = getCategoryIcon(event.category);
@@ -55,11 +57,12 @@ const EventCard = ({
         </View>
         <Text style={[styles.title, { color: colors.text }]}>{event.name}</Text>
         <Text style={{ color: colors.text }}>
-          Start Date: {new Date(event.startDate).toLocaleString()}
+          {t('events.startDate')}: {new Date(event.startDate).toLocaleString()}
         </Text>
         {event.finishDate !== null && (
           <Text style={{ color: colors.text }}>
-            Finish date: {new Date(event.finishDate).toLocaleString()}
+            {t('events.finishDate')}:{' '}
+            {new Date(event.finishDate).toLocaleString()}
           </Text>
         )}
         <UserIconSection users={event.users} />

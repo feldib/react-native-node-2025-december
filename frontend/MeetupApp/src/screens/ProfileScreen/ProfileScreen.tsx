@@ -10,9 +10,11 @@ import {
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { logout } from '@/store/authSlice';
 import { useTheme } from '@/theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 const ProfileScreen = () => {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
 
@@ -50,7 +52,7 @@ const ProfileScreen = () => {
       >
         <View style={styles.infoRow}>
           <Text style={[styles.label, { color: colors.textSecondary }]}>
-            Email:
+            {t('profile.email')}:
           </Text>
           <Text style={[styles.value, { color: colors.text }]}>
             {user.email}
@@ -59,14 +61,14 @@ const ProfileScreen = () => {
 
         <View style={styles.infoRow}>
           <Text style={[styles.label, { color: colors.textSecondary }]}>
-            Age:
+            {t('profile.age')}:
           </Text>
           <Text style={[styles.value, { color: colors.text }]}>{user.age}</Text>
         </View>
 
         <View style={styles.infoRow}>
           <Text style={[styles.label, { color: colors.textSecondary }]}>
-            Gender:
+            {t('profile.gender')}:
           </Text>
           <Text style={[styles.value, { color: colors.text }]}>
             {user.gender}
@@ -76,7 +78,7 @@ const ProfileScreen = () => {
         {user.description && (
           <View style={styles.infoRow}>
             <Text style={[styles.label, { color: colors.textSecondary }]}>
-              About:
+              {t('profile.about')}:
             </Text>
             <Text style={[styles.value, { color: colors.text }]}>
               {user.description}
@@ -87,7 +89,7 @@ const ProfileScreen = () => {
         {user.dateJoined && (
           <View style={styles.infoRow}>
             <Text style={[styles.label, { color: colors.textSecondary }]}>
-              Member Since:
+              {t('profile.memberSince')}:
             </Text>
             <Text style={[styles.value, { color: colors.text }]}>
               {new Date(user.dateJoined).toLocaleDateString()}
@@ -99,7 +101,7 @@ const ProfileScreen = () => {
       {user.photos && user.photos.length > 0 && (
         <View style={styles.photosSection}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            Photos
+            {t('profile.photos')}
           </Text>
           <View style={styles.photosGrid}>
             {user.photos.map((photo, index) => (
@@ -122,7 +124,7 @@ const ProfileScreen = () => {
             { color: colors.buttonSecondaryText },
           ]}
         >
-          Logout
+          {t('profile.logout')}
         </Text>
       </TouchableOpacity>
     </ScrollView>

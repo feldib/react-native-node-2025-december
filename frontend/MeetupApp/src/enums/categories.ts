@@ -15,14 +15,6 @@ export enum CategoryKey {
   WalkAndTalk = 'walk_and_talk',
 }
 
-export enum CategoryName {
-  Meetup = 'Meetup',
-  Party = 'Party',
-  Sports = 'Sports',
-  Boardgames = 'Boardgames',
-  WalkAndTalk = 'Walk and Talk',
-}
-
 export const CategoryIcons: Record<CategoryKey, IconDefinition> = {
   [CategoryKey.Meetup]: faUsers,
   [CategoryKey.Party]: faGlassCheers,
@@ -33,23 +25,18 @@ export const CategoryIcons: Record<CategoryKey, IconDefinition> = {
 
 export const Categories = {
   [CategoryKey.Meetup]: {
-    name: CategoryName.Meetup,
     icon: CategoryIcons[CategoryKey.Meetup],
   },
   [CategoryKey.Party]: {
-    name: CategoryName.Party,
     icon: CategoryIcons[CategoryKey.Party],
   },
   [CategoryKey.Sports]: {
-    name: CategoryName.Sports,
     icon: CategoryIcons[CategoryKey.Sports],
   },
   [CategoryKey.Boardgames]: {
-    name: CategoryName.Boardgames,
     icon: CategoryIcons[CategoryKey.Boardgames],
   },
   [CategoryKey.WalkAndTalk]: {
-    name: CategoryName.WalkAndTalk,
     icon: CategoryIcons[CategoryKey.WalkAndTalk],
   },
 };

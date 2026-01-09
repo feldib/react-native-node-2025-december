@@ -1,0 +1,48 @@
+{
+  "translation": {
+    "auth": {
+      "email": "Email",
+      "password": "Password",
+      "confirmEmail": "Confirm Email",
+      "confirmPassword": "Confirm Password",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "age": "Age",
+      "gender": "Gender",
+      "description": "Description",
+      "login": "Login",
+      "register": "Register",
+      "createAccount": "Create Account",
+      "male": "Male",
+      "female": "Female",
+      "other": "Other",
+      "dontHaveAccount": "Don't have an account? Register",
+      "alreadyHaveAccount": "Already have an account? Login"
+    },
+    "profile": {
+      "email": "Email",
+      "age": "Age",
+      "gender": "Gender",
+      "about": "About",
+      "memberSince": "Member Since",
+      "photos": "Photos",
+      "logout": "Logout"
+    },
+    "navigation": {
+      "current": "Current",
+      "past": "Past",
+      "currentEvents": "Current Events",
+      "pastEvents": "Past Events",
+      "eventDetail": "Event Detail",
+      "profile": "Profile"
+    },
+    "events": {
+      "startDate": "Start Date",
+      "finishDate": "Finish date",
+      "youAreCreator": "You're the creator",
+      "joined": "Joined",
+      "waitingApproval": "Waiting for approval",
+      "join": "Join"
+    }
+  }
+}

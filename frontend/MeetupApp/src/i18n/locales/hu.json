@@ -1,0 +1,48 @@
+{
+  "translation": {
+    "auth": {
+      "email": "E-mail",
+      "password": "Jelszó",
+      "confirmEmail": "E-mail megerősítése",
+      "confirmPassword": "Jelszó megerősítése",
+      "firstName": "Keresztnév",
+      "lastName": "Vezetéknév",
+      "age": "Kor",
+      "gender": "Nem",
+      "description": "Leírás",
+      "login": "Bejelentkezés",
+      "register": "Regisztráció",
+      "createAccount": "Fiók létrehozása",
+      "male": "Férfi",
+      "female": "Nő",
+      "other": "Egyéb",
+      "dontHaveAccount": "Nincs még fiókod? Regisztráció",
+      "alreadyHaveAccount": "Van már fiókod? Bejelentkezés"
+    },
+    "profile": {
+      "email": "E-mail",
+      "age": "Kor",
+      "gender": "Nem",
+      "about": "Magamról",
+      "memberSince": "Tagóta",
+      "photos": "Fotók",
+      "logout": "Kijelentkezés"
+    },
+    "navigation": {
+      "current": "Aktuális",
+      "past": "Múlt",
+      "currentEvents": "Aktuális Események",
+      "pastEvents": "Múltbeli Események",
+      "eventDetail": "Esemény Részletei",
+      "profile": "Profil"
+    },
+    "events": {
+      "startDate": "Kezdési dátum",
+      "finishDate": "Befejezési dátum",
+      "youAreCreator": "Te vagy a szervezõ",
+      "joined": "Csatlakozva",
+      "waitingApproval": "Jóváhagyásra vár",
+      "join": "Csatlakozás"
+    }
+  }
+}

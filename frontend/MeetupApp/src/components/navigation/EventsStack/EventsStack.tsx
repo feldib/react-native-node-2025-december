@@ -11,6 +11,7 @@ import {
   RouteName,
 } from '@/enums/routes';
 import { useTheme } from '@/theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 export type EventsStackParamList = {
   [RouteName.EventDetail]: { eventId: number; eventType: DisplayedEventType };
@@ -47,6 +48,7 @@ export default function EventsStack({
   eventType,
 }: EventsStackProps) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   return (
     <Stack.Navigator
       screenOptions={{
@@ -73,13 +75,13 @@ export default function EventsStack({
       <Stack.Screen
         name={Routes[RouteKey.EventDetail].name}
         component={Routes[RouteKey.EventDetail].component}
-        options={{ title: Routes[RouteKey.EventDetail].title }}
+        options={{ title: t('navigation.eventDetail') }}
         initialParams={{ eventType }}
       />
       <Stack.Screen
         name={Routes[RouteKey.Profile].name}
         component={Routes[RouteKey.Profile].component}
-        options={{ title: Routes[RouteKey.Profile].title }}
+        options={{ title: t('navigation.profile') }}
       />
     </Stack.Navigator>
   );
