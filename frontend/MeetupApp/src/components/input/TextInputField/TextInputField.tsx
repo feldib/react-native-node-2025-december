@@ -2,6 +2,7 @@ import { StyleSheet, TextInput, Text } from 'react-native';
 import { FieldValues } from 'react-hook-form';
 import FormField, { TextareaFormField } from '@/types/forms/FormField';
 import { useMemo } from 'react';
+import { useTheme } from '@/theme/ThemeContext';
 
 type TextInputFieldProps<T extends FieldValues> = {
   field: FormField<T>;
@@ -18,6 +19,7 @@ const TextInputField = <T extends FieldValues>({
   onChange,
   onBlur,
 }: TextInputFieldProps<T>) => {
+  const { colors } = useTheme();
   const autoCapitalize = useMemo(() => {
     if (field.autoCapitalize) {
       return field.autoCapitalize;
@@ -49,8 +51,13 @@ const TextInputField = <T extends FieldValues>({
   return (
     <>
       <TextInput
-        style={[styles.input, field.type === 'textarea' && styles.textArea]}
+        style={[
+          styles.input,
+          { borderColor: colors.text },
+          field.type === 'textarea' && styles.textArea,
+        ]}
         placeholder={field.placeholder}
+        placeholderTextColor={colors.textSecondary}
         value={value?.toString() || ''}
         onChangeText={onChange}
         onBlur={onBlur}
@@ -60,23 +67,20 @@ const TextInputField = <T extends FieldValues>({
         multiline={field.type === 'textarea'}
         numberOfLines={numberOfLines}
       />
-      {errorMessage && <Text style={styles.fieldError}>{errorMessage}</Text>}
+      {errorMessage && (
+        <Text style={[styles.fieldError, { color: colors.textError }]}>
+          {errorMessage}
+        </Text>
+      )}
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  label: {
-    fontSize: 16,
-    fontWeight: '500',
-    marginBottom: 10,
-    color: '#333',
-  },
   input: {
     width: '100%',
     height: 50,
     borderWidth: 1,
-    borderColor: '#ddd',
     borderRadius: 8,
     paddingHorizontal: 15,
     marginBottom: 15,
@@ -87,22 +91,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     paddingTop: 15,
   },
-  button: {
-    width: '100%',
-    height: 50,
-    backgroundColor: '#007AFF',
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-  },
   fieldError: {
-    color: 'red',
     fontSize: 12,
     marginBottom: 10,
     marginLeft: 5,

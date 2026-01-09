@@ -10,6 +10,7 @@ import {
   DisplayedEventType,
   RouteName,
 } from '@/enums/routes';
+import { useTheme } from '@/theme/ThemeContext';
 
 export type EventsStackParamList = {
   [RouteName.EventDetail]: { eventId: number; eventType: DisplayedEventType };
@@ -45,8 +46,18 @@ export default function EventsStack({
   title,
   eventType,
 }: EventsStackProps) {
+  const { colors } = useTheme();
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: colors.background,
+        },
+        headerTitleStyle: {
+          color: colors.text,
+        },
+      }}
+    >
       <Stack.Screen
         name={listScreenName}
         component={listComponent}

@@ -4,7 +4,7 @@ import {
 } from '@/store/eventsSlice';
 import { User } from '@/types/db/User';
 import { useCallback, useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import { useTheme } from '@/theme/ThemeContext';
 import { AppDispatch } from '@/store/store';
 
 const useJoinButton = ({
@@ -18,6 +18,7 @@ const useJoinButton = ({
   user: User | null;
   dispatch: AppDispatch;
 }) => {
+  const { colors } = useTheme();
   const isCreator = useMemo(
     () => userEventStatus?.isCreator || false,
     [userEventStatus],
@@ -36,29 +37,31 @@ const useJoinButton = ({
       return {
         text: "You're the creator",
         disabled: true,
-        style: styles.creatorButton,
+        style: {
+          backgroundColor: colors.buttonSecondary,
+        },
       };
     }
     if (hasRequestedToJoin && isApproved) {
       return {
         text: 'Joined',
         disabled: true,
-        style: styles.joinedButton,
+        style: { backgroundColor: colors.success },
       };
     }
     if (hasRequestedToJoin && !isApproved) {
       return {
         text: 'Waiting for approval',
         disabled: true,
-        style: styles.pendingButton,
+        style: { backgroundColor: colors.warning },
       };
     }
     return {
       text: 'Join',
       disabled: false,
-      style: styles.joinButton,
+      style: { backgroundColor: colors.accent },
     };
-  }, [isCreator, hasRequestedToJoin, isApproved]);
+  }, [isCreator, hasRequestedToJoin, isApproved, colors]);
 
   const handleJoin = useCallback(async () => {
     if (!user) return;
@@ -72,20 +75,5 @@ const useJoinButton = ({
 
   return { buttonConfig, handleJoin };
 };
-
-const styles = StyleSheet.create({
-  joinButton: {
-    backgroundColor: '#007AFF',
-  },
-  creatorButton: {
-    backgroundColor: '#6c757d',
-  },
-  joinedButton: {
-    backgroundColor: '#28a745',
-  },
-  pendingButton: {
-    backgroundColor: '#ffc107',
-  },
-});
 
 export default useJoinButton;

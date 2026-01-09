@@ -5,8 +5,10 @@ import { useAppSelector } from '@/store/hooks';
 import { RouteKey, Routes } from '@/enums/routes';
 import { LoggedOutStackParamList } from '@/components/navigation/LoggedOutNavigation/LoggedOutNavigation';
 import LoginForm from '@/components/forms/LoginForm/LoginForm';
+import { useTheme } from '@/theme/ThemeContext';
 
 const LoginScreen = () => {
+  const { colors } = useTheme();
   const { isLoading, error } = useAppSelector(state => state.auth);
   const navigation =
     useNavigation<NativeStackNavigationProp<LoggedOutStackParamList>>();
@@ -16,15 +18,19 @@ const LoginScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.title, { color: colors.textTitle }]}>Login</Text>
 
-      {error && <Text style={styles.error}>{error}</Text>}
+      {error && (
+        <Text style={[styles.error, { color: colors.textError }]}>{error}</Text>
+      )}
 
       <LoginForm isLoading={isLoading} />
 
       <TouchableOpacity style={styles.linkButton} onPress={handlePress}>
-        <Text style={styles.linkText}>Don't have an account? Register</Text>
+        <Text style={[styles.linkText, { color: colors.textLink }]}>
+          Don't have an account? Register
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -35,25 +41,21 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     justifyContent: 'center',
-    backgroundColor: '#fff',
   },
   title: {
     fontSize: 32,
     fontWeight: 'bold',
     marginBottom: 40,
     textAlign: 'center',
-    color: '#3f5eadff',
   },
   linkButton: {
     marginTop: 20,
     alignItems: 'center',
   },
   linkText: {
-    color: '#3f5eadff',
     fontSize: 16,
   },
   error: {
-    color: 'red',
     marginBottom: 10,
     textAlign: 'center',
   },

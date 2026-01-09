@@ -9,6 +9,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { RouteKey, Routes, DisplayedEventType } from '@/enums/routes';
 import UserIconSection from '@/components/event/UserIconSection/UserIconSection';
 import { EventsStackParamList } from '@/components/navigation/EventsStack/EventsStack';
+import { useTheme } from '@/theme/ThemeContext';
 
 const EventCard = ({
   event,
@@ -17,6 +18,7 @@ const EventCard = ({
   event: Event;
   eventType: DisplayedEventType;
 }) => {
+  const { colors } = useTheme();
   const navigation =
     useNavigation<NativeStackNavigationProp<EventsStackParamList>>();
   const categoryIcon = getCategoryIcon(event.category);
@@ -30,21 +32,33 @@ const EventCard = ({
 
   return (
     <Pressable onPress={handlePress}>
-      <View style={styles.card}>
+      <View
+        style={[
+          styles.card,
+          {
+            borderColor: colors.primary,
+            backgroundColor: colors.cardBackground,
+          },
+        ]}
+      >
         <View style={styles.categoryHeader}>
           {categoryIcon && (
             <FontAwesomeIcon
               icon={categoryIcon as IconProp}
               size={20}
-              color="#6c7899ff"
+              color={colors.textSecondary}
             />
           )}
-          <Text style={styles.category}>{getCategoryName(event.category)}</Text>
+          <Text style={[styles.category, { color: colors.textSecondary }]}>
+            {getCategoryName(event.category)}
+          </Text>
         </View>
-        <Text style={styles.title}>{event.name}</Text>
-        <Text>Start Date: {new Date(event.startDate).toLocaleString()}</Text>
+        <Text style={[styles.title, { color: colors.text }]}>{event.name}</Text>
+        <Text style={{ color: colors.text }}>
+          Start Date: {new Date(event.startDate).toLocaleString()}
+        </Text>
         {event.finishDate !== null && (
-          <Text>
+          <Text style={{ color: colors.text }}>
             Finish date: {new Date(event.finishDate).toLocaleString()}
           </Text>
         )}
@@ -60,8 +74,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 2,
     borderRadius: 8,
-    borderColor: '#3f5eadff',
-    backgroundColor: 'white',
   },
   categoryHeader: {
     flexDirection: 'row',
@@ -74,13 +86,11 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: '#3f5eadff',
   },
   category: {
     fontSize: 18,
     fontStyle: 'italic',
     fontWeight: '500',
-    color: '#6c7899ff',
   },
 });
 

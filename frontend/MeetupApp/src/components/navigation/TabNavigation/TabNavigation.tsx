@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import EventsStack from '@/components/navigation/EventsStack/EventsStack';
 import { Routes, RouteKey, RouteName } from '@/enums/routes';
+import { useTheme } from '@/theme/ThemeContext';
 
 export type TabNavigationParamList = {
   [RouteName.CurrentEventsTab]: undefined;
@@ -13,11 +14,15 @@ export type TabNavigationParamList = {
 const Tab = createBottomTabNavigator<TabNavigationParamList>();
 
 function TabNavigation() {
+  const { colors } = useTheme();
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarIcon: () => null,
         headerShown: false,
+        tabBarStyle: { backgroundColor: colors.background },
+        tabBarActiveTintColor: colors.accent,
+        tabBarInactiveTintColor: colors.textSecondary,
       }}
     >
       <Tab.Screen

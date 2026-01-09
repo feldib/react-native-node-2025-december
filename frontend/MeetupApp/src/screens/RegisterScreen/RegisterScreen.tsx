@@ -6,8 +6,10 @@ import { useAppSelector } from '@/store/hooks';
 import { RouteKey, Routes } from '@/enums/routes';
 import { LoggedOutStackParamList } from '@/components/navigation/LoggedOutNavigation/LoggedOutNavigation';
 import RegisterForm from '@/components/forms/RegisterForm/RegisterForm';
+import { useTheme } from '@/theme/ThemeContext';
 
 const RegisterScreen = () => {
+  const { colors } = useTheme();
   const { isLoading, error } = useAppSelector(state => state.auth);
   const navigation =
     useNavigation<NativeStackNavigationProp<LoggedOutStackParamList>>();
@@ -17,15 +19,26 @@ const RegisterScreen = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Create Account</Text>
+    <ScrollView
+      contentContainerStyle={[
+        styles.container,
+        { backgroundColor: colors.background },
+      ]}
+    >
+      <Text style={[styles.title, { color: colors.textTitle }]}>
+        Create Account
+      </Text>
 
-      {error && <Text style={styles.error}>{error}</Text>}
+      {error && (
+        <Text style={[styles.error, { color: colors.textError }]}>{error}</Text>
+      )}
 
       <RegisterForm isLoading={isLoading} />
 
-      <TouchableOpacity onPress={handlePress}>
-        <Text style={styles.link}>Already have an account? Login</Text>
+      <TouchableOpacity style={styles.linkButton} onPress={handlePress}>
+        <Text style={[styles.linkText, { color: colors.textLink }]}>
+          Already have an account? Login
+        </Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -37,29 +50,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#fff',
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 30,
-    color: '#333',
   },
-  link: {
-    color: '#007AFF',
-    marginTop: 15,
+  linkButton: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  linkText: {
     fontSize: 16,
   },
   error: {
-    color: 'red',
     marginBottom: 15,
     fontSize: 14,
-  },
-  fieldError: {
-    color: 'red',
-    fontSize: 12,
-    marginBottom: 10,
-    marginLeft: 5,
   },
 });
 

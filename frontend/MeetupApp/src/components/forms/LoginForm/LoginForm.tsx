@@ -12,6 +12,7 @@ import * as yup from 'yup';
 import loginSchema from '@/schemas/login';
 import InputFields from '@/components/input/InputFields/InputFields';
 import FormField from '@/types/forms/FormField';
+import { useTheme } from '@/theme/ThemeContext';
 
 type LoginFormData = yup.InferType<typeof loginSchema>;
 
@@ -29,6 +30,7 @@ const formFields: FormField<LoginFormData>[] = [
 ];
 
 const LoginForm = ({ isLoading }: { isLoading: boolean }) => {
+  const { colors } = useTheme();
   const dispatch = useAppDispatch();
 
   const {
@@ -52,14 +54,18 @@ const LoginForm = ({ isLoading }: { isLoading: boolean }) => {
       <InputFields control={control} errors={errors} formFields={formFields} />
 
       <TouchableOpacity
-        style={styles.button}
+        style={[styles.button, { backgroundColor: colors.buttonPrimary }]}
         onPress={handleSubmit(onSubmit)}
         disabled={isLoading}
       >
         {isLoading ? (
-          <ActivityIndicator color="#fff" />
+          <ActivityIndicator color={colors.buttonPrimaryText} />
         ) : (
-          <Text style={styles.buttonText}>Login</Text>
+          <Text
+            style={[styles.buttonText, { color: colors.buttonPrimaryText }]}
+          >
+            Login
+          </Text>
         )}
       </TouchableOpacity>
     </>
@@ -68,24 +74,14 @@ const LoginForm = ({ isLoading }: { isLoading: boolean }) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#3f5eadff',
     padding: 15,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 10,
   },
   buttonText: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
-  },
-  linkButton: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  linkText: {
-    color: '#3f5eadff',
-    fontSize: 16,
   },
 });
 

@@ -14,6 +14,7 @@ import { useAppDispatch } from '@/store/hooks';
 import InputFields from '@/components/input/InputFields/InputFields';
 import FormField from '@/types/forms/FormField';
 import Gender from '@/enums/gender';
+import { useTheme } from '@/theme/ThemeContext';
 
 type RegisterFormData = yup.InferType<typeof registerSchema>;
 
@@ -71,6 +72,7 @@ const formFields: FormField<RegisterFormData>[] = [
 ];
 
 const RegisterForm = ({ isLoading }: { isLoading: boolean }) => {
+  const { colors } = useTheme();
   const dispatch = useAppDispatch();
 
   const {
@@ -111,14 +113,18 @@ const RegisterForm = ({ isLoading }: { isLoading: boolean }) => {
       <InputFields control={control} errors={errors} formFields={formFields} />
 
       <TouchableOpacity
-        style={styles.button}
+        style={[styles.button, { backgroundColor: colors.buttonPrimary }]}
         onPress={handleSubmit(onSubmit)}
         disabled={isLoading}
       >
         {isLoading ? (
-          <ActivityIndicator color="#fff" />
+          <ActivityIndicator color={colors.buttonPrimaryText} />
         ) : (
-          <Text style={styles.buttonText}>Register</Text>
+          <Text
+            style={[styles.buttonText, { color: colors.buttonPrimaryText }]}
+          >
+            Register
+          </Text>
         )}
       </TouchableOpacity>
     </>
@@ -129,14 +135,12 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
     height: 50,
-    backgroundColor: '#007AFF',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
   },
   buttonText: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: '600',
   },

@@ -15,6 +15,7 @@ import { fetchEventById, fetchUserEventStatus } from '@/store/eventsSlice';
 import UserIconSection from '@/components/event/UserIconSection/UserIconSection';
 import { DisplayedEventType } from '@/enums/routes';
 import useJoinButton from './useJoinButton';
+import { useTheme } from '@/theme/ThemeContext';
 
 type EventDetailScreenProps = StaticScreenProps<{
   eventId: number;
@@ -22,6 +23,8 @@ type EventDetailScreenProps = StaticScreenProps<{
 }>;
 
 const EventDetailScreen = ({ route }: EventDetailScreenProps) => {
+  const { colors } = useTheme();
+
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
   const {
@@ -79,19 +82,33 @@ const EventDetailScreen = ({ route }: EventDetailScreenProps) => {
   const categoryIcon = getCategoryIcon(event.category);
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.card}>
+    <ScrollView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
+      <View
+        style={[
+          styles.card,
+          {
+            borderColor: colors.textSecondary,
+            backgroundColor: colors.cardBackground,
+          },
+        ]}
+      >
         <View style={styles.categoryHeader}>
           {categoryIcon && (
             <FontAwesomeIcon
               icon={categoryIcon as IconProp}
               size={20}
-              color="#6c7899ff"
+              color={colors.textSecondary}
             />
           )}
-          <Text style={styles.category}>{getCategoryName(event.category)}</Text>
+          <Text style={[styles.category, { color: colors.textSecondary }]}>
+            {getCategoryName(event.category)}
+          </Text>
         </View>
-        <Text style={styles.title}>{event.name}</Text>
+        <Text style={[styles.title, { color: colors.textTitle }]}>
+          {event.name}
+        </Text>
         <Text>Start Date: {new Date(event.startDate).toLocaleString()}</Text>
         {eventType === 'past' && (
           <Text>Finish date: {finishDate.toLocaleString()}</Text>
@@ -104,7 +121,11 @@ const EventDetailScreen = ({ route }: EventDetailScreenProps) => {
             disabled={buttonConfig.disabled}
             onPress={handleJoin}
           >
-            <Text style={styles.buttonText}>{buttonConfig.text}</Text>
+            <Text
+              style={[styles.buttonText, { color: colors.buttonPrimaryText }]}
+            >
+              {buttonConfig.text}
+            </Text>
           </TouchableOpacity>
         ) : null}
       </View>
@@ -116,15 +137,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: 'white',
   },
   card: {
     marginBottom: 20,
     padding: 10,
     borderWidth: 2,
     borderRadius: 8,
-    borderColor: '#3f5eadff',
-    backgroundColor: 'white',
   },
   categoryHeader: {
     flexDirection: 'row',
@@ -137,13 +155,11 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: '#3f5eadff',
   },
   category: {
     fontSize: 18,
     fontStyle: 'italic',
     fontWeight: '500',
-    color: '#6c7899ff',
   },
   button: {
     marginTop: 15,
@@ -155,7 +171,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
   },
 });
 

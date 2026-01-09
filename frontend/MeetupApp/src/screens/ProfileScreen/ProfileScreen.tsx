@@ -9,8 +9,10 @@ import {
 } from 'react-native';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { logout } from '@/store/authSlice';
+import { useTheme } from '@/theme/ThemeContext';
 
 const ProfileScreen = () => {
+  const { colors } = useTheme();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
 
@@ -23,46 +25,71 @@ const ProfileScreen = () => {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={[
+        styles.container,
+        { backgroundColor: colors.background },
+      ]}
+    >
       <View style={styles.header}>
-        <View style={styles.avatarContainer}>
-          <Text style={styles.avatarText}>
+        <View
+          style={[styles.avatarContainer, { backgroundColor: colors.avatar }]}
+        >
+          <Text style={[styles.avatarText, { color: colors.textInverse }]}>
             {user.firstName[0]}
             {user.lastName[0]}
           </Text>
         </View>
-        <Text style={styles.name}>
+        <Text style={[styles.name, { color: colors.text }]}>
           {user.firstName} {user.lastName}
         </Text>
       </View>
 
-      <View style={styles.infoSection}>
+      <View
+        style={[styles.infoSection, { backgroundColor: colors.cardBackground }]}
+      >
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Email:</Text>
-          <Text style={styles.value}>{user.email}</Text>
+          <Text style={[styles.label, { color: colors.textSecondary }]}>
+            Email:
+          </Text>
+          <Text style={[styles.value, { color: colors.text }]}>
+            {user.email}
+          </Text>
         </View>
 
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Age:</Text>
-          <Text style={styles.value}>{user.age}</Text>
+          <Text style={[styles.label, { color: colors.textSecondary }]}>
+            Age:
+          </Text>
+          <Text style={[styles.value, { color: colors.text }]}>{user.age}</Text>
         </View>
 
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Gender:</Text>
-          <Text style={styles.value}>{user.gender}</Text>
+          <Text style={[styles.label, { color: colors.textSecondary }]}>
+            Gender:
+          </Text>
+          <Text style={[styles.value, { color: colors.text }]}>
+            {user.gender}
+          </Text>
         </View>
 
         {user.description && (
           <View style={styles.infoRow}>
-            <Text style={styles.label}>About:</Text>
-            <Text style={styles.value}>{user.description}</Text>
+            <Text style={[styles.label, { color: colors.textSecondary }]}>
+              About:
+            </Text>
+            <Text style={[styles.value, { color: colors.text }]}>
+              {user.description}
+            </Text>
           </View>
         )}
 
         {user.dateJoined && (
           <View style={styles.infoRow}>
-            <Text style={styles.label}>Member Since:</Text>
-            <Text style={styles.value}>
+            <Text style={[styles.label, { color: colors.textSecondary }]}>
+              Member Since:
+            </Text>
+            <Text style={[styles.value, { color: colors.text }]}>
               {new Date(user.dateJoined).toLocaleDateString()}
             </Text>
           </View>
@@ -71,7 +98,9 @@ const ProfileScreen = () => {
 
       {user.photos && user.photos.length > 0 && (
         <View style={styles.photosSection}>
-          <Text style={styles.sectionTitle}>Photos</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            Photos
+          </Text>
           <View style={styles.photosGrid}>
             {user.photos.map((photo, index) => (
               <Image key={index} source={{ uri: photo }} style={styles.photo} />
@@ -80,8 +109,21 @@ const ProfileScreen = () => {
         </View>
       )}
 
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutButtonText}>Logout</Text>
+      <TouchableOpacity
+        style={[
+          styles.logoutButton,
+          { backgroundColor: colors.buttonSecondary },
+        ]}
+        onPress={handleLogout}
+      >
+        <Text
+          style={[
+            styles.logoutButtonText,
+            { color: colors.buttonSecondaryText },
+          ]}
+        >
+          Logout
+        </Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -90,7 +132,6 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: '#fff',
     padding: 20,
   },
   header: {
@@ -101,7 +142,6 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: '#007AFF',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 15,
@@ -109,15 +149,12 @@ const styles = StyleSheet.create({
   avatarText: {
     fontSize: 36,
     fontWeight: 'bold',
-    color: '#fff',
   },
   name: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
   },
   infoSection: {
-    backgroundColor: '#f8f9fa',
     borderRadius: 12,
     padding: 20,
     marginBottom: 20,
@@ -127,19 +164,16 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: '#6c757d',
     marginBottom: 5,
     fontWeight: '600',
   },
   value: {
     fontSize: 16,
-    color: '#333',
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 15,
-    color: '#333',
   },
   photosSection: {
     marginBottom: 20,
@@ -155,14 +189,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   logoutButton: {
-    backgroundColor: '#dc3545',
     borderRadius: 8,
     paddingVertical: 15,
     alignItems: 'center',
     marginTop: 10,
   },
   logoutButtonText: {
-    color: '#fff',
     fontSize: 16,
     fontWeight: '600',
   },

@@ -5,7 +5,7 @@ export interface BackgroundColors {
 
 const backgroundColorsLight: BackgroundColors = {
   background: '#ffffff',
-  cardBackground: '#ffffff',
+  cardBackground: '#f8f9fa',
 };
 
 const backgroundColorsDark: BackgroundColors = {
