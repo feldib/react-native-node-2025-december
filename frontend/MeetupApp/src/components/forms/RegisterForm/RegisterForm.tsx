@@ -110,6 +110,10 @@ const RegisterForm = () => {
 
   return (
     <>
+      {error && (
+        <Text style={[styles.error, { color: colors.textError }]}>{error}</Text>
+      )}
+
       <InputFields control={control} errors={errors} formFields={formFields} />
 
       <TouchableOpacity
@@ -143,6 +147,10 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     fontWeight: '600',
+  },
+  error: {
+    marginBottom: 15,
+    fontSize: 14,
   },
 });
 

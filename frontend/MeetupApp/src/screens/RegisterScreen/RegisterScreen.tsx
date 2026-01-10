@@ -56,10 +56,6 @@ const styles = StyleSheet.create({
   linkText: {
     fontSize: 16,
   },
-  error: {
-    marginBottom: 15,
-    fontSize: 14,
-  },
 });
 
 export default RegisterScreen;

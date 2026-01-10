@@ -50,10 +50,6 @@ const styles = StyleSheet.create({
   linkText: {
     fontSize: 16,
   },
-  error: {
-    marginBottom: 10,
-    textAlign: 'center',
-  },
 });
 
 export default LoginScreen;
