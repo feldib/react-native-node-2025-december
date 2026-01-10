@@ -9,31 +9,21 @@ import {
   removeEventUser,
   leaveEvent,
 } from "../controllers/eventController";
+import { authenticateToken } from "../config/jwt";
 
 const router = Router();
 
-// Create a new event
-router.post("/", createEvent);
+// Public routes
 
-// Get all events (exclude deleted)
 router.get("/", getAllEvents);
+// Protected routes - require authentication
+router.post("/", authenticateToken, createEvent);
 
-// Get event by ID
-router.get("/:id", getEventById);
-
-// Get user's status for an event
-router.get("/:id/user-status/:userId", getUserEventStatus);
-
-// Update event
-router.put("/:id", updateEvent);
-
-// Soft delete event
-router.delete("/:id", deleteEvent);
-
-// Leave event
-router.put("/:id/users/:userId", leaveEvent);
-
-// Remove user from event
-router.delete("/:id/users/:userId", removeEventUser);
+router.get("/:id", authenticateToken, getEventById);
+router.get("/:id/user-status/:userId", authenticateToken, getUserEventStatus);
+router.put("/:id", authenticateToken, updateEvent);
+router.delete("/:id", authenticateToken, deleteEvent);
+router.put("/:id/users/:userId", authenticateToken, leaveEvent);
+router.delete("/:id/users/:userId", authenticateToken, removeEventUser);
 
 export default router;

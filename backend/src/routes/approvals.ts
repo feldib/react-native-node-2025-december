@@ -4,16 +4,13 @@ import {
   getJoinRequests,
   setJoinRequest,
 } from "../controllers/approvalController";
+import { authenticateToken } from "../config/jwt";
 
 const router = Router();
 
-// Request to join an event
-router.post("/request-join", requestJoinEvent);
-
-// Get pending join requests for an event
-router.post("/join-requests", getJoinRequests);
-
-// Approve or reject a join request
-router.post("/join-request", setJoinRequest);
+// Protected routes - require authentication
+router.post("/request-join", authenticateToken, requestJoinEvent);
+router.post("/join-requests", authenticateToken, getJoinRequests);
+router.post("/join-request", authenticateToken, setJoinRequest);
 
 export default router;
