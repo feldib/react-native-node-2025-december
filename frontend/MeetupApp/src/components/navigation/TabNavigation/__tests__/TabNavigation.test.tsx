@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { Provider } from 'react-redux';
-import { store } from '@/store/store';
+import { AuthProvider } from '@/context/AuthContext';
 
 jest.mock('@/components/navigation/EventsStack/EventsStack', () => {
   return () => null;
@@ -12,10 +11,10 @@ import { render } from '@testing-library/react-native';
 
 test('TabNavigation renders', async () => {
   render(
-    <Provider store={store}>
+    <AuthProvider>
       <NavigationContainer>
         <TabNavigation />
       </NavigationContainer>
-    </Provider>,
+    </AuthProvider>,
   );
 });

@@ -1,7 +1,6 @@
 import React from 'react';
 import { ScrollView, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useAppSelector } from '@/store/hooks';
 import { RouteKey, Routes } from '@/enums/routes';
 import RegisterForm from '@/components/forms/RegisterForm/RegisterForm';
 import { useTheme } from '@/theme/ThemeContext';
@@ -10,7 +9,6 @@ import { useTranslation } from 'react-i18next';
 const RegisterScreen = () => {
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const { isLoading, error } = useAppSelector(state => state.auth);
   const navigation = useNavigation();
 
   const handlePress = () => {
@@ -28,11 +26,7 @@ const RegisterScreen = () => {
         {t('auth.createAccount')}
       </Text>
 
-      {error && (
-        <Text style={[styles.error, { color: colors.textError }]}>{error}</Text>
-      )}
-
-      <RegisterForm isLoading={isLoading} />
+      <RegisterForm />
 
       <TouchableOpacity style={styles.linkButton} onPress={handlePress}>
         <Text style={[styles.linkText, { color: colors.textLink }]}>

@@ -1,11 +1,13 @@
 import React from 'react';
+import { AuthProvider } from '@/context/AuthContext';
 
-jest.mock('@/store/hooks', () => ({
-  useAppDispatch: () => jest.fn(),
-}));
-
-jest.mock('@/store/authSlice', () => ({
-  register: () => ({ type: 'auth/register' }),
+jest.mock('@/hooks/queries/useAuth', () => ({
+  useRegisterMutation: () => ({
+    mutate: jest.fn(),
+    mutateAsync: jest.fn(),
+    isPending: false,
+    error: null,
+  }),
 }));
 
 jest.mock('@fortawesome/react-native-fontawesome', () => ({
@@ -16,5 +18,9 @@ import RegisterForm from '@/components/forms/RegisterForm/RegisterForm';
 import { render } from '@testing-library/react-native';
 
 test('RegisterForm renders', async () => {
-  render(<RegisterForm isLoading={false} />);
+  render(
+    <AuthProvider>
+      <RegisterForm />
+    </AuthProvider>,
+  );
 });

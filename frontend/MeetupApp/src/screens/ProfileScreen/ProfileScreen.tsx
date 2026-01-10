@@ -7,19 +7,17 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { logout } from '@/store/authSlice';
+import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
 
 const ProfileScreen = () => {
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
-  const { user } = useAppSelector(state => state.auth);
+  const { user, logout } = useAuth();
 
   const handleLogout = () => {
-    dispatch(logout());
+    logout();
   };
 
   if (!user) {

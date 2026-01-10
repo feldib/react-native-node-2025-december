@@ -1,18 +1,25 @@
-import { View } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 import EventList from '@/components/event/EventList/EventList';
-import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { fetchEvents } from '@/store/eventsSlice';
+import { useEventsQuery } from '@/hooks/queries/useEvents';
 import { useTheme } from '@/theme/ThemeContext';
+import { Event } from '@/types/db/Event';
 
 const CurrentEventsScreen = () => {
   const { colors } = useTheme();
-  const dispatch = useAppDispatch();
-  const { currentEvents } = useAppSelector(state => state.events);
+  const { data: events = [], isLoading } = useEventsQuery();
 
-  useEffect(() => {
-    dispatch(fetchEvents());
-  }, [dispatch]);
+  // Filter for current events (finishDate === null)
+  const currentEvents = events.filter(
+    (event: Event) => event.finishDate === null,
+  );
+
+  if (isLoading) {
+    return (
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <ActivityIndicator size="large" color={colors.accent} />
+      </View>
+    );
+  }
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>

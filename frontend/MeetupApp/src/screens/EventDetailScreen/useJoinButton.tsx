@@ -1,26 +1,22 @@
-import {
-  joinEvent as joinEventAction,
-  UserEventStatus,
-} from '@/store/eventsSlice';
+import { UserEventStatus } from '@/types/UserEventStatus';
 import { User } from '@/types/db/User';
 import { useCallback, useMemo } from 'react';
 import { useTheme } from '@/theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
-import { AppDispatch } from '@/store/store';
+import { useJoinEventMutation } from '@/hooks/queries/useEvents';
 
 const useJoinButton = ({
   userEventStatus,
   eventId,
   user,
-  dispatch,
 }: {
   userEventStatus: UserEventStatus | null;
   eventId: number;
   user: User | null;
-  dispatch: AppDispatch;
 }) => {
   const { colors } = useTheme();
   const { t } = useTranslation();
+  const joinMutation = useJoinEventMutation();
   const isCreator = useMemo(
     () => userEventStatus?.isCreator || false,
     [userEventStatus],
@@ -60,20 +56,27 @@ const useJoinButton = ({
     }
     return {
       text: t('events.join'),
-      disabled: false,
+      disabled: joinMutation.isPending,
       style: { backgroundColor: colors.accent },
     };
-  }, [isCreator, hasRequestedToJoin, isApproved, colors, t]);
+  }, [
+    isCreator,
+    hasRequestedToJoin,
+    isApproved,
+    colors,
+    t,
+    joinMutation.isPending,
+  ]);
 
   const handleJoin = useCallback(async () => {
     if (!user) return;
 
     try {
-      await dispatch(joinEventAction({ eventId, userId: user.id })).unwrap();
+      await joinMutation.mutateAsync({ eventId, userId: user.id });
     } catch (error) {
       console.error('Error joining event:', error);
     }
-  }, [user, eventId, dispatch]);
+  }, [user, eventId, joinMutation]);
 
   return { buttonConfig, handleJoin };
 };

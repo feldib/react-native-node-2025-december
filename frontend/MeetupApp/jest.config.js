@@ -4,8 +4,6 @@ module.exports = {
     'node_modules/(?!(react-native' +
       '|@react-native' +
       '|@react-navigation' +
-      '|react-redux' +
-      '|@reduxjs\\/toolkit' +
       '|immer' +
       '|react-native-safe-area-context' +
       '|react-native-screens' +

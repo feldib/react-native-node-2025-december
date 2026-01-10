@@ -1,5 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { useAppSelector } from '@/store/hooks';
+import { useAuth } from '@/context/AuthContext';
 import TabNavigation, {
   TabNavigationParamList,
 } from '@/components/navigation/TabNavigation/TabNavigation';
@@ -14,7 +14,7 @@ export type RootParamList = LoggedOutStackParamList &
   EventsStackParamList;
 
 function AppNavigator() {
-  const user = useAppSelector(state => state.auth.user);
+  const { user } = useAuth();
 
   return (
     <NavigationContainer>

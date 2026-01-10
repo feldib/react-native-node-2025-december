@@ -5,12 +5,11 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import { register } from '@/store/authSlice';
+import { useRegisterMutation } from '@/hooks/queries/useAuth';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import registerSchema from '@/schemas/register';
-import { useAppDispatch } from '@/store/hooks';
 import InputFields from '@/components/input/InputFields/InputFields';
 import FormField from '@/types/forms/FormField';
 import Gender from '@/enums/gender';
@@ -19,10 +18,11 @@ import { useTranslation } from 'react-i18next';
 
 type RegisterFormData = yup.InferType<typeof registerSchema>;
 
-const RegisterForm = ({ isLoading }: { isLoading: boolean }) => {
+const RegisterForm = () => {
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
+  const registerMutation = useRegisterMutation();
+  const isLoading = registerMutation.isPending;
 
   const {
     control,
@@ -44,17 +44,15 @@ const RegisterForm = ({ isLoading }: { isLoading: boolean }) => {
   });
 
   const onSubmit = async (data: RegisterFormData) => {
-    await dispatch(
-      register({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        password: data.password,
-        age: data.age,
-        gender: data.gender,
-        description: data.description,
-      }),
-    );
+    await registerMutation.mutateAsync({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      password: data.password,
+      age: data.age,
+      gender: data.gender,
+      description: data.description,
+    });
   };
 
   const formFields: FormField<RegisterFormData>[] = [

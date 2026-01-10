@@ -1,14 +1,12 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import { store } from '@/store/store';
-
 import AppNavigator from '@/components/navigation/AppNavigator/AppNavigator';
 import { render } from '@testing-library/react-native';
+import { AuthProvider } from '@/context/AuthContext';
 
 test('AppNavigator renders', async () => {
   render(
-    <Provider store={store}>
+    <AuthProvider>
       <AppNavigator />
-    </Provider>,
+    </AuthProvider>,
   );
 });

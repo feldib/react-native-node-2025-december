@@ -27,46 +27,53 @@ jest.mock('@/screens/EventDetailScreen/useJoinButton', () => ({
   }),
 }));
 
-jest.mock('@/store/hooks', () => ({
-  useAppDispatch: () => jest.fn(),
-  useAppSelector: (selector: any) =>
-    selector({
-      auth: { user: { id: 10, firstName: 'A', lastName: 'B' } },
-      events: {
-        displayedCurrentEvent: {
-          id: 1,
-          name: 'Event',
-          category: 'tech',
-          startDate: new Date().toISOString(),
-          finishDate: null,
-          users: [],
-        },
-        displayedPastEvent: {
-          id: 2,
-          name: 'Past Event',
-          category: 'tech',
-          startDate: new Date().toISOString(),
-          finishDate: new Date().toISOString(),
-          users: [],
-        },
-        userEventStatus: null,
-        isLoading: false,
-      },
-    }),
+jest.mock('@/context/AuthContext', () => ({
+  useAuth: () => ({
+    user: { id: 10, firstName: 'A', lastName: 'B' },
+    setAuth: jest.fn(),
+    logout: jest.fn(),
+    isLoading: false,
+  }),
+  AuthProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
-jest.mock('@/store/eventsSlice', () => ({
-  fetchEventById: (id: number) => ({ type: 'events/fetchById', payload: id }),
-  fetchUserEventStatus: (params: any) => ({
-    type: 'events/fetchUserEventStatus',
-    payload: params,
-  }),
+jest.mock('@/hooks/queries/useEvents', () => ({
+  useEventQuery: jest.fn(() => ({
+    data: null,
+    isLoading: false,
+    error: null,
+  })),
+  useUserEventStatusQuery: jest.fn(() => ({
+    data: null,
+    isLoading: false,
+    error: null,
+  })),
 }));
 
 import EventDetailScreen from '@/screens/EventDetailScreen/EventDetailScreen';
 import { render } from '@testing-library/react-native';
+import * as useEventsHooks from '@/hooks/queries/useEvents';
 
 test('EventDetailScreen renders current event with button', async () => {
+  (useEventsHooks.useEventQuery as jest.Mock).mockReturnValue({
+    data: {
+      id: 1,
+      name: 'Event',
+      category: 'tech',
+      startDate: new Date().toISOString(),
+      finishDate: null,
+      users: [],
+    },
+    isLoading: false,
+    error: null,
+  });
+
+  (useEventsHooks.useUserEventStatusQuery as jest.Mock).mockReturnValue({
+    data: null,
+    isLoading: false,
+    error: null,
+  });
+
   const { getByText } = render(
     <EventDetailScreen
       route={{ params: { eventId: 1, eventType: 'current' } } as any}
@@ -77,6 +84,25 @@ test('EventDetailScreen renders current event with button', async () => {
 });
 
 test('EventDetailScreen renders past event without button', async () => {
+  (useEventsHooks.useEventQuery as jest.Mock).mockReturnValue({
+    data: {
+      id: 2,
+      name: 'Past Event',
+      category: 'tech',
+      startDate: new Date().toISOString(),
+      finishDate: new Date().toISOString(),
+      users: [],
+    },
+    isLoading: false,
+    error: null,
+  });
+
+  (useEventsHooks.useUserEventStatusQuery as jest.Mock).mockReturnValue({
+    data: null,
+    isLoading: false,
+    error: null,
+  });
+
   const { getByText } = render(
     <EventDetailScreen
       route={{ params: { eventId: 2, eventType: 'past' } } as any}

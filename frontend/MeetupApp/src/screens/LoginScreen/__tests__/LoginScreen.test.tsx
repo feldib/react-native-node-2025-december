@@ -5,9 +5,14 @@ jest.mock('@/components/forms/LoginForm/LoginForm', () => {
   return () => null;
 });
 
-jest.mock('@/store/hooks', () => ({
-  useAppSelector: (selector: any) =>
-    selector({ auth: { isLoading: false, error: null } }),
+jest.mock('@/context/AuthContext', () => ({
+  useAuth: () => ({
+    user: null,
+    setAuth: jest.fn(),
+    logout: jest.fn(),
+    isLoading: false,
+  }),
+  AuthProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
 import LoginScreen from '@/screens/LoginScreen/LoginScreen';

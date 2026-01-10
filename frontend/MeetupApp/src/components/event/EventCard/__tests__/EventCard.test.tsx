@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import { AuthProvider } from '@/context/AuthContext';
 
 jest.mock('@fortawesome/react-native-fontawesome', () => ({
   FontAwesomeIcon: () => null,
@@ -10,13 +11,14 @@ jest.mock('@/helpers/categories', () => ({
   getCategoryIcon: () => 'icon',
 }));
 
-jest.mock('@/store/hooks', () => ({
-  useAppDispatch: () => jest.fn(),
-  useAppSelector: (selector: any) =>
-    selector({
-      auth: { user: null },
-      events: { currentEvents: [], pastEvents: [] },
-    }),
+jest.mock('@/context/AuthContext', () => ({
+  useAuth: () => ({
+    user: null,
+    setAuth: jest.fn(),
+    logout: jest.fn(),
+    isLoading: false,
+  }),
+  AuthProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
 import EventCard from '@/components/event/EventCard/EventCard';

@@ -61,5 +61,33 @@ jest.mock('@/theme/ThemeContext', () => {
   };
 });
 
+// Mock TanStack Query to provide QueryClient in tests
+jest.mock('@tanstack/react-query', () => ({
+  ...jest.requireActual('@tanstack/react-query'),
+  useQuery: jest.fn(() => ({
+    data: null,
+    isLoading: false,
+    error: null,
+  })),
+  useMutation: jest.fn(() => ({
+    mutate: jest.fn(),
+    mutateAsync: jest.fn(),
+    isPending: false,
+    error: null,
+  })),
+  useQueryClient: jest.fn(() => ({
+    invalidateQueries: jest.fn(),
+    setQueryData: jest.fn(),
+  })),
+}));
+
+// Mock async-storage for auth context persistence
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  getItem: jest.fn(() => Promise.resolve(null)),
+  setItem: jest.fn(() => Promise.resolve()),
+  removeItem: jest.fn(() => Promise.resolve()),
+  clear: jest.fn(() => Promise.resolve()),
+}));
+
 // Enable Testing Library's extended matchers (jest-native)
 import '@testing-library/jest-native/extend-expect';
