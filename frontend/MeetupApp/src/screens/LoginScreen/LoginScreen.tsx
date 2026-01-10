@@ -1,6 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useAppSelector } from '@/store/hooks';
 import { RouteKey, Routes } from '@/enums/routes';
 import LoginForm from '@/components/forms/LoginForm/LoginForm';
 import { useTheme } from '@/theme/ThemeContext';
@@ -9,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 const LoginScreen = () => {
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const { isLoading, error } = useAppSelector(state => state.auth);
   const navigation = useNavigation();
 
   const handlePress = () => {
@@ -22,11 +20,7 @@ const LoginScreen = () => {
         {t('auth.login')}
       </Text>
 
-      {error && (
-        <Text style={[styles.error, { color: colors.textError }]}>{error}</Text>
-      )}
-
-      <LoginForm isLoading={isLoading} />
+      <LoginForm />
 
       <TouchableOpacity style={styles.linkButton} onPress={handlePress}>
         <Text style={[styles.linkText, { color: colors.textLink }]}>

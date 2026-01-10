@@ -6,12 +6,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { StaticScreenProps } from '@react-navigation/native';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { getCategoryName, getCategoryIcon } from '@/helpers/categories';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { useAppSelector, useAppDispatch } from '@/store/hooks';
-import { fetchEventById, fetchUserEventStatus } from '@/store/eventsSlice';
+import { useAppSelector } from '@/store/hooks';
+import { useGetEventByIdQuery, useGetUserEventStatusQuery } from '@/store/api';
 import UserIconSection from '@/components/event/UserIconSection/UserIconSection';
 import { DisplayedEventType } from '@/enums/routes';
 import useJoinButton from './useJoinButton';
@@ -25,45 +25,41 @@ type EventDetailScreenProps = StaticScreenProps<{
 const EventDetailScreen = ({ route }: EventDetailScreenProps) => {
   const { colors } = useTheme();
 
-  const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
-  const {
-    displayedCurrentEvent,
-    displayedPastEvent,
-    userEventStatus,
-    isLoading: loading,
-  } = useAppSelector(state => state.events);
 
   const { eventId, eventType } = route.params;
 
-  const event = useMemo(() => {
-    return eventType === 'current' ? displayedCurrentEvent : displayedPastEvent;
-  }, [eventType, displayedCurrentEvent, displayedPastEvent]);
+  const {
+    data: event,
+    isLoading: eventLoading,
+    refetch: refetchEvent,
+  } = useGetEventByIdQuery(eventId);
+
+  const {
+    data: userEventStatus,
+    isLoading: statusLoading,
+    refetch: refetchStatus,
+  } = useGetUserEventStatusQuery(
+    { eventId, userId: user?.id || 0 },
+    {
+      skip: !user || eventType !== 'current',
+    },
+  );
 
   const finishDate = useMemo(() => {
     if (!event || !event.finishDate) return false;
     return new Date(event.finishDate);
   }, [event]);
 
-  useEffect(() => {
-    dispatch(fetchEventById(eventId));
-  }, [eventId, dispatch]);
-
-  useEffect(() => {
-    // Only fetch user event status for current events, not past events
-    if (user && eventType === 'current') {
-      dispatch(fetchUserEventStatus({ eventId, userId: user.id }));
-    }
-  }, [eventId, user, eventType, dispatch]);
-
   const { buttonConfig, handleJoin } = useJoinButton({
     userEventStatus,
     eventId,
     user,
-    dispatch,
+    refetchEvent,
+    refetchStatus,
   });
 
-  if (loading) {
+  if (eventLoading || (statusLoading && eventType === 'current')) {
     return (
       <View style={styles.container}>
         <Text>Loading...</Text>

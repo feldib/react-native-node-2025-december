@@ -32,34 +32,36 @@ jest.mock('@/store/hooks', () => ({
   useAppSelector: (selector: any) =>
     selector({
       auth: { user: { id: 10, firstName: 'A', lastName: 'B' } },
-      events: {
-        displayedCurrentEvent: {
-          id: 1,
-          name: 'Event',
-          category: 'tech',
-          startDate: new Date().toISOString(),
-          finishDate: null,
-          users: [],
-        },
-        displayedPastEvent: {
-          id: 2,
-          name: 'Past Event',
-          category: 'tech',
-          startDate: new Date().toISOString(),
-          finishDate: new Date().toISOString(),
-          users: [],
-        },
-        userEventStatus: null,
-        isLoading: false,
-      },
     }),
 }));
 
-jest.mock('@/store/eventsSlice', () => ({
-  fetchEventById: (id: number) => ({ type: 'events/fetchById', payload: id }),
-  fetchUserEventStatus: (params: any) => ({
-    type: 'events/fetchUserEventStatus',
-    payload: params,
+jest.mock('@/store/api', () => ({
+  useGetEventByIdQuery: (id: number) => ({
+    data:
+      id === 1
+        ? {
+            id: 1,
+            name: 'Event',
+            category: 'tech',
+            startDate: new Date().toISOString(),
+            finishDate: null,
+            users: [],
+          }
+        : {
+            id: 2,
+            name: 'Past Event',
+            category: 'tech',
+            startDate: new Date().toISOString(),
+            finishDate: new Date().toISOString(),
+            users: [],
+          },
+    isLoading: false,
+    refetch: jest.fn(),
+  }),
+  useGetUserEventStatusQuery: () => ({
+    data: null,
+    isLoading: false,
+    refetch: jest.fn(),
   }),
 }));
 

@@ -8,7 +8,7 @@ import {
   Image,
 } from 'react-native';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { logout } from '@/store/authSlice';
+import { logout } from '@/store/authStateSlice';
 import { useTheme } from '@/theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
 

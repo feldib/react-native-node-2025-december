@@ -5,12 +5,11 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import { register } from '@/store/authSlice';
+import { useRegisterMutation } from '@/store/api';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import registerSchema from '@/schemas/register';
-import { useAppDispatch } from '@/store/hooks';
 import InputFields from '@/components/input/InputFields/InputFields';
 import FormField from '@/types/forms/FormField';
 import Gender from '@/enums/gender';
@@ -19,10 +18,10 @@ import { useTranslation } from 'react-i18next';
 
 type RegisterFormData = yup.InferType<typeof registerSchema>;
 
-const RegisterForm = ({ isLoading }: { isLoading: boolean }) => {
+const RegisterForm = () => {
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
+  const [registerUser, { isLoading }] = useRegisterMutation();
 
   const {
     control,
@@ -44,8 +43,8 @@ const RegisterForm = ({ isLoading }: { isLoading: boolean }) => {
   });
 
   const onSubmit = async (data: RegisterFormData) => {
-    await dispatch(
-      register({
+    try {
+      await registerUser({
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
@@ -53,8 +52,10 @@ const RegisterForm = ({ isLoading }: { isLoading: boolean }) => {
         age: data.age,
         gender: data.gender,
         description: data.description,
-      }),
-    );
+      }).unwrap();
+    } catch (error) {
+      console.error('Registration failed:', error);
+    }
   };
 
   const formFields: FormField<RegisterFormData>[] = [

@@ -1,18 +1,16 @@
 import { View } from 'react-native';
 import EventList from '@/components/event/EventList/EventList';
-import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { fetchEvents } from '@/store/eventsSlice';
+import { useGetEventsQuery } from '@/store/api';
 import { useTheme } from '@/theme/ThemeContext';
+import { useMemo } from 'react';
 
 const CurrentEventsScreen = () => {
   const { colors } = useTheme();
-  const dispatch = useAppDispatch();
-  const { currentEvents } = useAppSelector(state => state.events);
+  const { data: events = [] } = useGetEventsQuery();
 
-  useEffect(() => {
-    dispatch(fetchEvents());
-  }, [dispatch]);
+  const currentEvents = useMemo(() => {
+    return events.filter(event => event.finishDate === null);
+  }, [events]);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>

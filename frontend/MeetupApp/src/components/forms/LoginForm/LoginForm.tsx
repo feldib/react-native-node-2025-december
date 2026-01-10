@@ -4,8 +4,7 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import { useAppDispatch } from '@/store/hooks';
-import { login } from '@/store/authSlice';
+import { useLoginMutation } from '@/store/api';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -17,10 +16,10 @@ import { useTranslation } from 'react-i18next';
 
 type LoginFormData = yup.InferType<typeof loginSchema>;
 
-const LoginForm = ({ isLoading }: { isLoading: boolean }) => {
+const LoginForm = () => {
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
+  const [login, { isLoading }] = useLoginMutation();
 
   const {
     control,
@@ -35,7 +34,11 @@ const LoginForm = ({ isLoading }: { isLoading: boolean }) => {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    await dispatch(login({ email: data.email, password: data.password }));
+    try {
+      await login({ email: data.email, password: data.password }).unwrap();
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
   };
 
   const formFields: FormField<LoginFormData>[] = [

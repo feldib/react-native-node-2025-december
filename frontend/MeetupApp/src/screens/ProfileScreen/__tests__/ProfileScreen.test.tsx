@@ -10,7 +10,7 @@ jest.mock('@/store/hooks', () => ({
     }),
 }));
 
-jest.mock('@/store/authSlice', () => ({
+jest.mock('@/store/authStateSlice', () => ({
   logout: () => ({ type: 'auth/logout' }),
 }));
 

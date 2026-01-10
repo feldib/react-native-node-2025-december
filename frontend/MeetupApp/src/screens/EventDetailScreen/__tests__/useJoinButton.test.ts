@@ -1,8 +1,11 @@
 import { renderHook } from '@testing-library/react-native';
 import useJoinButton from '../useJoinButton';
-import { AppDispatch } from '@/store/store';
 
-const mockDispatch: AppDispatch = jest.fn();
+jest.mock('@/store/api', () => ({
+  useJoinEventMutation: () => [jest.fn(), { isLoading: false }],
+}));
+
+const mockRefetch = jest.fn();
 
 describe('useJoinButton', () => {
   test('should return "Join" button when user has not requested to join', () => {
@@ -11,7 +14,8 @@ describe('useJoinButton', () => {
         userEventStatus: null,
         eventId: 1,
         user: { id: 1, firstName: 'John', lastName: 'Doe', email: '' } as any,
-        dispatch: mockDispatch,
+        refetchEvent: mockRefetch,
+        refetchStatus: mockRefetch,
       }),
     );
 
@@ -30,7 +34,8 @@ describe('useJoinButton', () => {
         },
         eventId: 1,
         user: { id: 1, firstName: 'John', lastName: 'Doe', email: '' } as any,
-        dispatch: mockDispatch,
+        refetchEvent: mockRefetch,
+        refetchStatus: mockRefetch,
       }),
     );
 
@@ -49,7 +54,8 @@ describe('useJoinButton', () => {
         },
         eventId: 1,
         user: { id: 1, firstName: 'John', lastName: 'Doe', email: '' } as any,
-        dispatch: mockDispatch,
+        refetchEvent: mockRefetch,
+        refetchStatus: mockRefetch,
       }),
     );
 
@@ -68,7 +74,8 @@ describe('useJoinButton', () => {
         },
         eventId: 1,
         user: { id: 1, firstName: 'John', lastName: 'Doe', email: '' } as any,
-        dispatch: mockDispatch,
+        refetchEvent: mockRefetch,
+        refetchStatus: mockRefetch,
       }),
     );
 
@@ -82,7 +89,8 @@ describe('useJoinButton', () => {
         userEventStatus: null,
         eventId: 1,
         user: { id: 1, firstName: 'John', lastName: 'Doe', email: '' } as any,
-        dispatch: mockDispatch,
+        refetchEvent: mockRefetch,
+        refetchStatus: mockRefetch,
       }),
     );
 

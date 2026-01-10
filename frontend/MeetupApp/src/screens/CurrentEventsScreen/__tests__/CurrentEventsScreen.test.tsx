@@ -4,14 +4,10 @@ jest.mock('@/components/event/EventList/EventList', () => {
   return () => null;
 });
 
-jest.mock('@/store/hooks', () => ({
-  useAppDispatch: () => jest.fn(),
-  useAppSelector: (selector: any) =>
-    selector({ events: { currentEvents: [] } }),
-}));
-
-jest.mock('@/store/eventsSlice', () => ({
-  fetchEvents: () => ({ type: 'events/fetch' }),
+jest.mock('@/store/api', () => ({
+  useGetEventsQuery: () => ({
+    data: [],
+  }),
 }));
 
 import CurrentEventsScreen from '@/screens/CurrentEventsScreen/CurrentEventsScreen';
