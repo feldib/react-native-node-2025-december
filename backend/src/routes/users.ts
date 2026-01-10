@@ -7,7 +7,7 @@ import {
   updateUser,
   deleteUser,
 } from "../controllers/userController";
-import { authenticateToken } from "../config/jwt";
+import { authenticateToken } from "../middleware/authenticate";
 
 const router = Router();
 
