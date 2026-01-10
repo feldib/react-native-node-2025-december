@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   TouchableOpacity,
@@ -22,6 +22,7 @@ const RegisterForm = () => {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const [registerUser, { isLoading }] = useRegisterMutation();
+  const [hasError, setHasError] = useState<boolean>(false);
 
   const {
     control,
@@ -53,8 +54,10 @@ const RegisterForm = () => {
         gender: data.gender,
         description: data.description,
       }).unwrap();
+      setHasError(false);
     } catch (error) {
       console.error('Registration failed:', error);
+      setHasError(true);
     }
   };
 
@@ -113,6 +116,12 @@ const RegisterForm = () => {
 
   return (
     <>
+      {hasError && (
+        <Text style={[styles.error, { color: colors.textError }]}>
+          {t('auth.registerError')}
+        </Text>
+      )}
+
       <InputFields control={control} errors={errors} formFields={formFields} />
 
       <TouchableOpacity
@@ -146,6 +155,10 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     fontWeight: '600',
+  },
+  error: {
+    marginBottom: 15,
+    fontSize: 14,
   },
 });
 
