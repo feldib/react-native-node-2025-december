@@ -19,7 +19,13 @@ import { useTranslation } from 'react-i18next';
 
 type RegisterFormData = yup.InferType<typeof registerSchema>;
 
-const RegisterForm = ({ isLoading }: { isLoading: boolean }) => {
+const RegisterForm = ({
+  isLoading,
+  error,
+}: {
+  isLoading: boolean;
+  error: string | null;
+}) => {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -112,6 +118,10 @@ const RegisterForm = ({ isLoading }: { isLoading: boolean }) => {
 
   return (
     <>
+      {error && (
+        <Text style={[styles.error, { color: colors.textError }]}>{error}</Text>
+      )}
+
       <InputFields control={control} errors={errors} formFields={formFields} />
 
       <TouchableOpacity
@@ -145,6 +155,10 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     fontWeight: '600',
+  },
+  error: {
+    marginBottom: 15,
+    fontSize: 14,
   },
 });
 

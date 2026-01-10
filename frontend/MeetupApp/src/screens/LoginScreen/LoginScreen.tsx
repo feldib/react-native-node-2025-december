@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 const LoginScreen = () => {
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const { isLoading, error } = useAppSelector(state => state.auth);
+  const { isLoading, error: loginError } = useAppSelector(state => state.auth);
   const navigation = useNavigation();
 
   const handlePress = () => {
@@ -22,11 +22,7 @@ const LoginScreen = () => {
         {t('auth.login')}
       </Text>
 
-      {error && (
-        <Text style={[styles.error, { color: colors.textError }]}>{error}</Text>
-      )}
-
-      <LoginForm isLoading={isLoading} />
+      <LoginForm isLoading={isLoading} error={loginError} />
 
       <TouchableOpacity style={styles.linkButton} onPress={handlePress}>
         <Text style={[styles.linkText, { color: colors.textLink }]}>
@@ -55,10 +51,6 @@ const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 16,
-  },
-  error: {
-    marginBottom: 10,
-    textAlign: 'center',
   },
 });
 

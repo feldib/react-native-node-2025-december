@@ -17,7 +17,13 @@ import { useTranslation } from 'react-i18next';
 
 type LoginFormData = yup.InferType<typeof loginSchema>;
 
-const LoginForm = ({ isLoading }: { isLoading: boolean }) => {
+const LoginForm = ({
+  isLoading,
+  error,
+}: {
+  isLoading: boolean;
+  error: string | null;
+}) => {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -53,6 +59,10 @@ const LoginForm = ({ isLoading }: { isLoading: boolean }) => {
 
   return (
     <>
+      {error && (
+        <Text style={[styles.error, { color: colors.textError }]}>{error}</Text>
+      )}
+
       <InputFields control={control} errors={errors} formFields={formFields} />
 
       <TouchableOpacity
@@ -84,6 +94,10 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  error: {
+    marginBottom: 15,
+    fontSize: 14,
   },
 });
 

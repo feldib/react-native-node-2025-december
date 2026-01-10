@@ -10,7 +10,9 @@ import { useTranslation } from 'react-i18next';
 const RegisterScreen = () => {
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const { isLoading, error } = useAppSelector(state => state.auth);
+  const { isLoading, error: registerError } = useAppSelector(
+    state => state.auth,
+  );
   const navigation = useNavigation();
 
   const handlePress = () => {
@@ -28,11 +30,7 @@ const RegisterScreen = () => {
         {t('auth.createAccount')}
       </Text>
 
-      {error && (
-        <Text style={[styles.error, { color: colors.textError }]}>{error}</Text>
-      )}
-
-      <RegisterForm isLoading={isLoading} />
+      <RegisterForm isLoading={isLoading} error={registerError} />
 
       <TouchableOpacity style={styles.linkButton} onPress={handlePress}>
         <Text style={[styles.linkText, { color: colors.textLink }]}>
@@ -61,10 +59,6 @@ const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 16,
-  },
-  error: {
-    marginBottom: 15,
-    fontSize: 14,
   },
 });
 
