@@ -7,7 +7,7 @@ jest.mock('@/components/forms/RegisterForm/RegisterForm', () => {
 
 jest.mock('@/store/hooks', () => ({
   useAppSelector: (selector: any) =>
-    selector({ auth: { isLoading: false, error: null } }),
+    selector({ auth: { isLoading: false, hasError: null } }),
 }));
 
 import RegisterScreen from '@/screens/RegisterScreen/RegisterScreen';

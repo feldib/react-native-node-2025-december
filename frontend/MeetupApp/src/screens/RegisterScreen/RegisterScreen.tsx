@@ -30,7 +30,7 @@ const RegisterScreen = () => {
         {t('auth.createAccount')}
       </Text>
 
-      <RegisterForm isLoading={isLoading} error={registerError} />
+      <RegisterForm isLoading={isLoading} hasError={!!registerError} />
 
       <TouchableOpacity style={styles.linkButton} onPress={handlePress}>
         <Text style={[styles.linkText, { color: colors.textLink }]}>

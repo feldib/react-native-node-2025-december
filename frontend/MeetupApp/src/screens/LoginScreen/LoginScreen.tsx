@@ -22,7 +22,7 @@ const LoginScreen = () => {
         {t('auth.login')}
       </Text>
 
-      <LoginForm isLoading={isLoading} error={loginError} />
+      <LoginForm isLoading={isLoading} hasError={!!loginError} />
 
       <TouchableOpacity style={styles.linkButton} onPress={handlePress}>
         <Text style={[styles.linkText, { color: colors.textLink }]}>

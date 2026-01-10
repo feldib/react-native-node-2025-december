@@ -17,7 +17,9 @@
       "female": "Female",
       "other": "Other",
       "dontHaveAccount": "Don't have an account? Register",
-      "alreadyHaveAccount": "Already have an account? Login"
+      "alreadyHaveAccount": "Already have an account? Login",
+      "loginError": "Login failed. Please check your credentials and try again.",
+      "registerError": "Registration failed. Please check your details and try again."
     },
     "profile": {
       "email": "Email",

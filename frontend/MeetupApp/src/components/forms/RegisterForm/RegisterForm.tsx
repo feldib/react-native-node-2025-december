@@ -21,10 +21,10 @@ type RegisterFormData = yup.InferType<typeof registerSchema>;
 
 const RegisterForm = ({
   isLoading,
-  error,
+  hasError,
 }: {
   isLoading: boolean;
-  error: string | null;
+  hasError: boolean;
 }) => {
   const { colors } = useTheme();
   const { t } = useTranslation();
@@ -118,8 +118,10 @@ const RegisterForm = ({
 
   return (
     <>
-      {error && (
-        <Text style={[styles.error, { color: colors.textError }]}>{error}</Text>
+      {hasError && (
+        <Text style={[styles.error, { color: colors.textError }]}>
+          {t('auth.registerError')}
+        </Text>
       )}
 
       <InputFields control={control} errors={errors} formFields={formFields} />
