@@ -3,6 +3,7 @@ import { AppDataSource } from "../config/database";
 import { User } from "../entities/User";
 import bcrypt from "bcrypt";
 import Gender from "../enums/gender";
+import { generateToken } from "../config/jwt";
 
 const userRepository = AppDataSource.getRepository(User);
 
@@ -30,9 +31,11 @@ export const login = async (req: Request, res: Response) => {
 
     const { password: _, ...userWithoutPassword } = user;
 
+    const token = generateToken(user.id, user.email);
+
     res.json({
       user: userWithoutPassword,
-      // token: null,
+      token,
     });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -80,9 +83,11 @@ export const register = async (req: Request, res: Response) => {
 
     const { password: _, ...userWithoutPassword } = savedUser;
 
+    const token = generateToken(savedUser.id, savedUser.email);
+
     res.status(201).json({
       user: userWithoutPassword,
-      // token: null,
+      token,
     });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
