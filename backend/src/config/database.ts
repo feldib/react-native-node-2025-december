@@ -16,8 +16,8 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  synchronize: true, // Auto-create tables (set to false in production)
-  logging: false,
+  synchronize: false, // Auto-create tables (set to false in production)
+  logging: true,
   entities: [User, Event, UsersOfEvent, Approval],
   migrations: [Initial1764777528828],
   subscribers: [],

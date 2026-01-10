@@ -3,10 +3,77 @@ import * as bcrypt from "bcrypt";
 
 export class Initial1764777528828 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
+    // Create enum types
+    await queryRunner.query(`
+      CREATE TYPE gender_enum AS ENUM ('male', 'female', 'other');
+    `);
+
+    await queryRunner.query(`
+      CREATE TYPE category_enum AS ENUM ('meetup', 'party', 'sports', 'boardgames', 'walk_and_talk');
+    `);
+
+    await queryRunner.query(`
+      CREATE TYPE approval_enum AS ENUM ('approved', 'rejected', 'pending');
+    `);
+
+    // Create users table
+    await queryRunner.query(`
+      CREATE TABLE users (
+        id SERIAL PRIMARY KEY,
+        first_name VARCHAR(100) NOT NULL,
+        last_name VARCHAR(100) NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        date_joined TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        age INTEGER NOT NULL,
+        gender gender_enum NOT NULL,
+        description TEXT,
+        photos TEXT[] DEFAULT ARRAY[]::TEXT[],
+        is_deleted BOOLEAN DEFAULT false
+      );
+    `);
+
+    // Create events table
+    await queryRunner.query(`
+      CREATE TABLE events (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        start_date TIMESTAMP NOT NULL,
+        finish_date TIMESTAMP,
+        is_deleted BOOLEAN DEFAULT false,
+        category category_enum NOT NULL
+      );
+    `);
+
+    // Create users_of_event table
+    await queryRunner.query(`
+      CREATE TABLE users_of_event (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        event_id INTEGER NOT NULL REFERENCES events(id) ON DELETE CASCADE,
+        is_creator BOOLEAN DEFAULT false,
+        is_approved BOOLEAN DEFAULT false,
+        left_event BOOLEAN DEFAULT false,
+        UNIQUE(user_id, event_id)
+      );
+    `);
+
+    // Create approvals table
+    await queryRunner.query(`
+      CREATE TABLE approvals (
+        id SERIAL PRIMARY KEY,
+        approver_user_id INTEGER NOT NULL,
+        target_user_id INTEGER NOT NULL,
+        event_id INTEGER NOT NULL,
+        status approval_enum DEFAULT 'pending',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(approver_user_id, target_user_id, event_id)
+      );
+    `);
+
     // Hash password for test users
     const hashedPassword = await bcrypt.hash("password123", 10);
-
-    // Note: Enum types and tables are created automatically by TypeORM synchronize
 
     // Insert test users
     await queryRunner.query(`
@@ -50,9 +117,15 @@ export class Initial1764777528828 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    // Delete in reverse order due to foreign key constraints
-    await queryRunner.query(`DELETE FROM users_of_event`);
-    await queryRunner.query(`DELETE FROM events`);
-    await queryRunner.query(`DELETE FROM users`);
+    // Drop tables in reverse order due to foreign key constraints
+    await queryRunner.query(`DROP TABLE IF EXISTS approvals CASCADE`);
+    await queryRunner.query(`DROP TABLE IF EXISTS users_of_event CASCADE`);
+    await queryRunner.query(`DROP TABLE IF EXISTS events CASCADE`);
+    await queryRunner.query(`DROP TABLE IF EXISTS users CASCADE`);
+
+    // Drop enum types
+    await queryRunner.query(`DROP TYPE IF EXISTS approval_enum`);
+    await queryRunner.query(`DROP TYPE IF EXISTS category_enum`);
+    await queryRunner.query(`DROP TYPE IF EXISTS gender_enum`);
   }
 }
