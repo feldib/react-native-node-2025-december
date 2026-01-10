@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+import type { StringValue } from "ms";
 import { Request, Response, NextFunction } from "express";
 
 dotenv.config();
@@ -22,8 +23,12 @@ export const generateToken = (userId: number, email: string): string => {
     email,
   };
 
-  // Token expires in 7 days
-  const token = jwt.sign(payload, jwtSecretKey, { expiresIn: "7d" });
+  // Token expires based on TOKEN_EXPIRATION env variable (default: 7 days)
+  const token = jwt.sign(payload, jwtSecretKey, {
+    expiresIn:
+      (process.env.TOKEN_EXPIRATION as StringValue | undefined | number) ||
+      "7d",
+  });
 
   return token;
 };
