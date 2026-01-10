@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   TouchableOpacity,
@@ -23,6 +23,7 @@ const RegisterForm = () => {
   const { t } = useTranslation();
   const registerMutation = useRegisterMutation();
   const isLoading = registerMutation.isPending;
+  const [hasError, setHasError] = useState<boolean>(false);
 
   const {
     control,
@@ -44,15 +45,22 @@ const RegisterForm = () => {
   });
 
   const onSubmit = async (data: RegisterFormData) => {
-    await registerMutation.mutateAsync({
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-      password: data.password,
-      age: data.age,
-      gender: data.gender,
-      description: data.description,
-    });
+    try {
+      await registerMutation
+        .mutateAsync({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          password: data.password,
+          age: data.age,
+          gender: data.gender,
+          description: data.description,
+        })
+        .unwrap();
+    } catch (error) {
+      console.error('Registration error:', error);
+      setHasError(true);
+    }
   };
 
   const formFields: FormField<RegisterFormData>[] = [

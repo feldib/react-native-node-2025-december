@@ -13,6 +13,7 @@ import InputFields from '@/components/input/InputFields/InputFields';
 import FormField from '@/types/forms/FormField';
 import { useTheme } from '@/theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 
 type LoginFormData = yup.InferType<typeof loginSchema>;
 
@@ -21,6 +22,7 @@ const LoginForm = () => {
   const { t } = useTranslation();
   const loginMutation = useLoginMutation();
   const isLoading = loginMutation.isPending;
+  const [hasError, setHasError] = useState<boolean>(false);
 
   const {
     control,
@@ -35,10 +37,17 @@ const LoginForm = () => {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    await loginMutation.mutateAsync({
-      email: data.email,
-      password: data.password,
-    });
+    try {
+      await loginMutation
+        .mutateAsync({
+          email: data.email,
+          password: data.password,
+        })
+        .unwrap();
+    } catch (error) {
+      console.error('Login error:', error);
+      setHasError(true);
+    }
   };
 
   const formFields: FormField<LoginFormData>[] = [
