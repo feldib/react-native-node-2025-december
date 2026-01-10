@@ -32,7 +32,7 @@ export const login = async (req: Request, res: Response) => {
 
     res.json({
       user: userWithoutPassword,
-      token: null,
+      // token: null,
     });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -82,7 +82,7 @@ export const register = async (req: Request, res: Response) => {
 
     res.status(201).json({
       user: userWithoutPassword,
-      token: null,
+      // token: null,
     });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
