@@ -7,23 +7,18 @@ import {
   updateUser,
   deleteUser,
 } from "../controllers/userController";
+import { authenticateToken } from "../config/jwt";
 
 const router = Router();
 
-// Authentication routes
+// Authentication routes (public)
 router.post("/login", login);
 router.post("/register", register);
 
-// Get all users
-router.get("/", getAllUsers);
-
-// Get user by ID
-router.get("/:id", getUserById);
-
-// Update user
-router.put("/:id", updateUser);
-
-// Soft delete user
-router.delete("/:id", deleteUser);
+// Protected routes - require authentication
+router.get("/", authenticateToken, getAllUsers);
+router.get("/:id", authenticateToken, getUserById);
+router.put("/:id", authenticateToken, updateUser);
+router.delete("/:id", authenticateToken, deleteUser);
 
 export default router;
