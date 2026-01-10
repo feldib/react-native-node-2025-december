@@ -38,12 +38,10 @@ const LoginForm = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      await loginMutation
-        .mutateAsync({
-          email: data.email,
-          password: data.password,
-        })
-        .unwrap();
+      await loginMutation.mutateAsync({
+        email: data.email,
+        password: data.password,
+      });
     } catch (error) {
       console.error('Login error:', error);
       setHasError(true);

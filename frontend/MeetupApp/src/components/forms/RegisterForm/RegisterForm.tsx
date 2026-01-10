@@ -46,17 +46,15 @@ const RegisterForm = () => {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      await registerMutation
-        .mutateAsync({
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          password: data.password,
-          age: data.age,
-          gender: data.gender,
-          description: data.description,
-        })
-        .unwrap();
+      await registerMutation.mutateAsync({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        password: data.password,
+        age: data.age,
+        gender: data.gender,
+        description: data.description,
+      });
     } catch (error) {
       console.error('Registration error:', error);
       setHasError(true);
