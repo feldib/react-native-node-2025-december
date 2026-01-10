@@ -9,7 +9,7 @@ import {
   removeEventUser,
   leaveEvent,
 } from "../controllers/eventController";
-import { authenticateToken } from "../config/jwt";
+import { authenticateToken } from "../middleware/authenticate";
 
 const router = Router();
 
