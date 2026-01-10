@@ -1,8 +1,6 @@
-import "reflect-metadata";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import type { StringValue } from "ms";
-import { Request, Response, NextFunction } from "express";
 
 dotenv.config();
 
@@ -31,30 +29,6 @@ export const generateToken = (userId: number, email: string): string => {
   });
 
   return token;
-};
-
-// Middleware for JWT authentication
-export const authenticateToken = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1]; // Bearer TOKEN
-
-  if (!token) {
-    return res.status(401).json({ error: "Access token required" });
-  }
-
-  const jwtSecretKey = process.env.JWT_SECRET_KEY as string;
-
-  try {
-    const verified = jwt.verify(token, jwtSecretKey) as JwtPayload;
-    (req as any).user = verified; // Attach user info to request
-    next();
-  } catch (error) {
-    return res.status(403).json({ error: "Invalid or expired token" });
-  }
 };
 
 // Verify token without middleware (for optional use)

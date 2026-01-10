@@ -4,7 +4,7 @@ import {
   getJoinRequests,
   setJoinRequest,
 } from "../controllers/approvalController";
-import { authenticateToken } from "../config/jwt";
+import { authenticateToken } from "../middleware/authenticate";
 
 const router = Router();
 
