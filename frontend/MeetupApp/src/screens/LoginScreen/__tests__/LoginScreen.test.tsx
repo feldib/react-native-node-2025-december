@@ -5,11 +5,6 @@ jest.mock('@/components/forms/LoginForm/LoginForm', () => {
   return () => null;
 });
 
-jest.mock('@/store/hooks', () => ({
-  useAppSelector: (selector: any) =>
-    selector({ auth: { isLoading: false, error: null } }),
-}));
-
 import LoginScreen from '@/screens/LoginScreen/LoginScreen';
 import { render } from '@testing-library/react-native';
 
