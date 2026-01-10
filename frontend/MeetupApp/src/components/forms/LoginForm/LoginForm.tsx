@@ -56,8 +56,10 @@ const LoginForm = () => {
 
   return (
     <>
-      {error && (
-        <Text style={[styles.error, { color: colors.textError }]}>{error}</Text>
+      {hasError && (
+        <Text style={[styles.error, { color: colors.textError }]}>
+          {t('auth.loginError')}
+        </Text>
       )}
 
       <InputFields control={control} errors={errors} formFields={formFields} />

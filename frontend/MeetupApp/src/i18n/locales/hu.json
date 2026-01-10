@@ -17,7 +17,9 @@
       "female": "Nő",
       "other": "Egyéb",
       "dontHaveAccount": "Nincs még fiókod? Regisztráció",
-      "alreadyHaveAccount": "Van már fiókod? Bejelentkezés"
+      "alreadyHaveAccount": "Van már fiókod? Bejelentkezés",
+      "loginError": "Bejelentkezés sikertelen. Kérjük, ellenőrizd a hitelesítő adataidat, és próbáld újra.",
+      "registerError": "Regisztráció sikertelen. Kérjük, ellenőrizd az adataidat, és próbáld újra."
     },
     "profile": {
       "email": "E-mail",
