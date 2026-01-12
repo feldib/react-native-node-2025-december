@@ -7,19 +7,23 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { logout } from '@/store/authStateSlice';
+import { useAppSelector } from '@/store/hooks';
+import { useLogoutMutation } from '@/store/api';
 import { useTheme } from '@/theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
 
 const ProfileScreen = () => {
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
+  const [logout, { isLoading }] = useLogoutMutation();
 
-  const handleLogout = () => {
-    dispatch(logout());
+  const handleLogout = async () => {
+    try {
+      await logout().unwrap();
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   if (!user) {
@@ -117,6 +121,7 @@ const ProfileScreen = () => {
           { backgroundColor: colors.buttonSecondary },
         ]}
         onPress={handleLogout}
+        disabled={isLoading}
       >
         <Text
           style={[
@@ -124,7 +129,7 @@ const ProfileScreen = () => {
             { color: colors.buttonSecondaryText },
           ]}
         >
-          {t('profile.logout')}
+          {isLoading ? t('profile.loggingOut') : t('profile.logout')}
         </Text>
       </TouchableOpacity>
     </ScrollView>

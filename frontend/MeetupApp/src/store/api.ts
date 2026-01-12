@@ -1,7 +1,19 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import type {
+  BaseQueryFn,
+  FetchArgs,
+  FetchBaseQueryError,
+} from '@reduxjs/toolkit/query';
 import { User } from '@/types/db/User';
 import { Event } from '@/types/db/Event';
 import config from '../../config';
+import {
+  getAccessToken,
+  getRefreshToken,
+  storeAccessToken,
+  storeRefreshToken,
+  clearTokens,
+} from '@/helpers/tokens';
 
 interface JoinRequest {
   targetUser: any;
@@ -20,7 +32,8 @@ export interface UserEventStatus {
 
 interface LoginResponse {
   user: User;
-  //   token: string;
+  accessToken: string;
+  refreshToken: string;
 }
 
 interface RegisterRequest {
@@ -33,19 +46,80 @@ interface RegisterRequest {
   description?: string;
 }
 
+// Base query with token handling
+const baseQueryWithAuth = fetchBaseQuery({
+  baseUrl: config.fetching.base,
+  prepareHeaders: async (headers, { endpoint }) => {
+    // Public endpoints that don't need tokens
+    const publicEndpoints = ['login', 'register', 'getEvents'];
+
+    if (!publicEndpoints.includes(endpoint)) {
+      const token = await getAccessToken();
+      if (token) {
+        headers.set('authorization', `Bearer ${token}`);
+      }
+    }
+    return headers;
+  },
+});
+
+// Base query with automatic token refresh
+const baseQueryWithReauth: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  let result = await baseQueryWithAuth(args, api, extraOptions);
+
+  if (result.error && result.error.status === 401) {
+    // Try to refresh the token
+    const refreshToken = await getRefreshToken();
+
+    if (refreshToken) {
+      try {
+        const refreshResult = await baseQueryWithAuth(
+          {
+            url: `${config.fetching.users}/refresh-token`,
+            method: 'POST',
+            body: { refreshToken },
+          },
+          api,
+          extraOptions,
+        );
+
+        if (refreshResult.data) {
+          const { accessToken, refreshToken: newRefreshToken } =
+            refreshResult.data as {
+              accessToken: string;
+              refreshToken: string;
+            };
+
+          // Store new tokens
+          await storeAccessToken(accessToken);
+          await storeRefreshToken(newRefreshToken);
+
+          // Retry the original query with new token
+          result = await baseQueryWithAuth(args, api, extraOptions);
+        } else {
+          // Refresh failed, clear tokens
+          await clearTokens();
+        }
+      } catch {
+        // Refresh failed, clear tokens
+        await clearTokens();
+      }
+    } else {
+      // No refresh token, clear tokens
+      await clearTokens();
+    }
+  }
+
+  return result;
+};
+
 export const api = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({
-    baseUrl: config.fetching.base,
-    prepareHeaders: (headers, { getState: _ }) => {
-      // You can add auth token here if needed
-      // const token = (getState() as RootState).auth.token;
-      // if (token) {
-      //   headers.set('authorization', `Bearer ${token}`);
-      // }
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithReauth,
   tagTypes: ['Events', 'Event', 'Auth', 'JoinRequests', 'UserEventStatus'],
   endpoints: builder => ({
     // Auth endpoints
@@ -56,6 +130,12 @@ export const api = createApi({
           method: 'POST',
           body: credentials,
         }),
+        transformResponse: async (response: LoginResponse) => {
+          // Store tokens after successful login
+          await storeAccessToken(response.accessToken);
+          await storeRefreshToken(response.refreshToken);
+          return response;
+        },
         invalidatesTags: ['Auth'],
       },
     ),
@@ -66,6 +146,43 @@ export const api = createApi({
         method: 'POST',
         body: userData,
       }),
+      transformResponse: async (response: LoginResponse) => {
+        // Store tokens after successful registration
+        await storeAccessToken(response.accessToken);
+        await storeRefreshToken(response.refreshToken);
+        return response;
+      },
+      invalidatesTags: ['Auth'],
+    }),
+
+    logout: builder.mutation<void, void>({
+      queryFn: async () => {
+        try {
+          const refreshToken = await getRefreshToken();
+
+          if (refreshToken) {
+            // Call backend logout endpoint
+            await fetch(
+              `${config.fetching.base}${config.fetching.users}/logout`,
+              {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ refreshToken }),
+              },
+            );
+          }
+
+          // Clear tokens from device
+          await clearTokens();
+
+          return { data: undefined };
+        } catch (error) {
+          console.error('Error logging out:', error);
+          // Clear tokens anyway even if backend call fails
+          await clearTokens();
+          return { data: undefined };
+        }
+      },
       invalidatesTags: ['Auth'],
     }),
 
@@ -149,6 +266,7 @@ export const api = createApi({
 export const {
   useLoginMutation,
   useRegisterMutation,
+  useLogoutMutation,
   useGetEventsQuery,
   useGetEventByIdQuery,
   useGetUserEventStatusQuery,
