@@ -32,7 +32,11 @@ const EventDetailScreen = ({ route }: EventDetailScreenProps) => {
   const { user } = useAuth();
   const { eventId, eventType } = route.params;
 
-  const { data: event, isLoading: eventLoading, error: eventError } = useEventQuery(eventId);
+  const {
+    data: event,
+    isLoading: eventLoading,
+    error: eventError,
+  } = useEventQuery(eventId);
 
   const userStatusUserId = eventType === 'current' && user ? user.id : 0;
   const { data: userEventStatus, isLoading: statusLoading } =
@@ -60,7 +64,9 @@ const EventDetailScreen = ({ route }: EventDetailScreenProps) => {
   if (eventError) {
     return (
       <View style={styles.container}>
-        <Text>Error loading event: {eventError.message || 'Please try again'}</Text>
+        <Text>
+          Error loading event: {eventError.message || 'Please try again'}
+        </Text>
       </View>
     );
   }

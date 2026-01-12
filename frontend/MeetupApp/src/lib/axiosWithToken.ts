@@ -37,7 +37,10 @@ axiosWithToken.interceptors.response.use(
     const originalRequest = error.config;
 
     // If error is 401 or 403 (invalid/expired token) and we haven't tried to refresh yet
-    if ((error.response?.status === 401 || error.response?.status === 403) && !originalRequest._retry) {
+    if (
+      (error.response?.status === 401 || error.response?.status === 403) &&
+      !originalRequest._retry
+    ) {
       originalRequest._retry = true;
 
       try {
