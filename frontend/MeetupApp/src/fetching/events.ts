@@ -18,8 +18,10 @@ export const getEventById = async (eventId: number) => {
       `${config.fetching.events}/${eventId}`,
     );
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching event:', error);
+    console.error('Error response:', error.response?.data);
+    console.error('Error status:', error.response?.status);
     throw error;
   }
 };
@@ -84,8 +86,10 @@ export const getUserEventStatusApi = async (
       `${config.fetching.events}/${eventId}/user-status/${userId}`,
     );
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching user event status:', error);
+    console.error('Error response:', error.response?.data);
+    console.error('Error status:', error.response?.status);
     throw error;
   }
 };
