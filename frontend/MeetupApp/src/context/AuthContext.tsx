@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User } from '@/types/db/User';
+import { logoutUser } from '@/fetching/auth';
 
 interface AuthContextType {
   user: User | null;
@@ -47,10 +48,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const logout = async () => {
     try {
+      setIsLoading(true);
+      // Call backend logout and clear tokens from keychain
+      await logoutUser();
+      // Clear user from state and AsyncStorage
       setUser(null);
-      await Promise.all([AsyncStorage.removeItem('user')]);
+      await AsyncStorage.removeItem('user');
     } catch (error) {
-      console.error('Failed to clear auth state:', error);
+      console.error('Failed to logout:', error);
+      // Still clear local state even if backend call fails
+      setUser(null);
+      await AsyncStorage.removeItem('user');
+    } finally {
+      setIsLoading(false);
     }
   };
 

@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 const ProfileScreen = () => {
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const { user, logout } = useAuth();
+  const { user, logout, isLoading } = useAuth();
 
   const handleLogout = () => {
     logout();
@@ -122,7 +122,7 @@ const ProfileScreen = () => {
             { color: colors.buttonSecondaryText },
           ]}
         >
-          {t('profile.logout')}
+          {isLoading ? t('profile.loggingOut') : t('profile.logout')}
         </Text>
       </TouchableOpacity>
     </ScrollView>
