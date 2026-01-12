@@ -5,7 +5,6 @@ jest.mock('@fortawesome/react-native-fontawesome', () => ({
 }));
 
 jest.mock('@/helpers/categories', () => ({
-  getCategoryName: (c: any) => String(c),
   getCategoryIcon: () => 'icon',
 }));
 

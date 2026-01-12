@@ -4,11 +4,10 @@ import {
   ScrollView,
   View,
   TouchableOpacity,
-  ActivityIndicator,
 } from 'react-native';
 import { StaticScreenProps } from '@react-navigation/native';
 import { useMemo } from 'react';
-import { getCategoryName, getCategoryIcon } from '@/helpers/categories';
+import { getCategoryIcon } from '@/helpers/categories';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useAuth } from '@/context/AuthContext';
@@ -20,6 +19,7 @@ import UserIconSection from '@/components/event/UserIconSection/UserIconSection'
 import { DisplayedEventType } from '@/enums/routes';
 import useJoinButton from './useJoinButton';
 import { useTheme } from '@/theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 type EventDetailScreenProps = StaticScreenProps<{
   eventId: number;
@@ -27,6 +27,7 @@ type EventDetailScreenProps = StaticScreenProps<{
 }>;
 
 const EventDetailScreen = ({ route }: EventDetailScreenProps) => {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const { user } = useAuth();
   const { eventId, eventType } = route.params;
@@ -88,14 +89,14 @@ const EventDetailScreen = ({ route }: EventDetailScreenProps) => {
             />
           )}
           <Text style={[styles.category, { color: colors.textSecondary }]}>
-            {getCategoryName(event.category)}
+            {t(`categories.${event.category}`)}
           </Text>
         </View>
         <Text style={[styles.title, { color: colors.textTitle }]}>
           {event.name}
         </Text>
         <Text>Start Date: {new Date(event.startDate).toLocaleString()}</Text>
-        {eventType === 'past' && (
+        {eventType === 'past' && finishDate && (
           <Text>Finish date: {finishDate.toLocaleString()}</Text>
         )}
         <UserIconSection users={event.users} />

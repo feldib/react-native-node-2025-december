@@ -46,6 +46,13 @@
       "joined": "Joined",
       "waitingApproval": "Waiting for approval",
       "join": "Join"
+    },
+    "categories": {
+      "meetup": "Találkozó",
+      "party": "Buli",
+      "sports": "Sport",
+      "boardgames": "Társasjátékok",
+      "walk_and_talk": "Séta és Beszélgetés"
     }
   }
 }

@@ -1,13 +1,11 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { AuthProvider } from '@/context/AuthContext';
 
 jest.mock('@fortawesome/react-native-fontawesome', () => ({
   FontAwesomeIcon: () => null,
 }));
 
 jest.mock('@/helpers/categories', () => ({
-  getCategoryName: (c: any) => String(c),
   getCategoryIcon: () => 'icon',
 }));
 

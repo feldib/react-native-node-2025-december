@@ -2,7 +2,7 @@ import { StyleSheet, Text, Pressable } from 'react-native';
 import { View } from 'react-native';
 import { Event } from '@/types/db/Event';
 import { useNavigation } from '@react-navigation/native';
-import { getCategoryName, getCategoryIcon } from '@/helpers/categories';
+import { getCategoryIcon } from '@/helpers/categories';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { RouteKey, Routes, DisplayedEventType } from '@/enums/routes';
@@ -49,7 +49,7 @@ const EventCard = ({
             />
           )}
           <Text style={[styles.category, { color: colors.textSecondary }]}>
-            {getCategoryName(event.category)}
+            {t(`categories.${event.category}`)}
           </Text>
         </View>
         <Text style={[styles.title, { color: colors.text }]}>{event.name}</Text>
