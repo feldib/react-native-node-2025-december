@@ -1,11 +1,10 @@
-import axios from 'axios';
+import axiosWithToken from '@/lib/axiosWithToken';
 import config from '../../config';
+import axiosNoToken from '@/lib/axiosNoToken';
 
 export const getEvents = async () => {
   try {
-    const response = await axios.get(
-      `${config.fetching.base}${config.fetching.events}`,
-    );
+    const response = await axiosNoToken.get(`${config.fetching.events}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching events:', error);
@@ -15,8 +14,8 @@ export const getEvents = async () => {
 
 export const getEventById = async (eventId: number) => {
   try {
-    const response = await axios.get(
-      `${config.fetching.base}${config.fetching.events}/${eventId}`,
+    const response = await axiosWithToken.get(
+      `${config.fetching.events}/${eventId}`,
     );
     return response.data;
   } catch (error) {
@@ -27,13 +26,13 @@ export const getEventById = async (eventId: number) => {
 
 export const joinEventApi = async (eventId: number, userId: number) => {
   try {
-    await axios.post(
-      `${config.fetching.base}${config.fetching.approvals}/request-join`,
-      { userId, eventId },
-    );
+    await axiosWithToken.post(`${config.fetching.approvals}/request-join`, {
+      userId,
+      eventId,
+    });
     // Fetch updated event data
-    const response = await axios.get(
-      `${config.fetching.base}${config.fetching.events}/${eventId}`,
+    const response = await axiosWithToken.get(
+      `${config.fetching.events}/${eventId}`,
     );
     return response.data;
   } catch (error) {
@@ -47,8 +46,8 @@ export const getJoinRequestsApi = async (
   currentUserId: number,
 ) => {
   try {
-    const response = await axios.post(
-      `${config.fetching.base}${config.fetching.approvals}/join-requests`,
+    const response = await axiosWithToken.post(
+      `${config.fetching.approvals}/join-requests`,
       { eventId, currentUserId },
     );
     return response.data;
@@ -65,8 +64,8 @@ export const setJoinRequestApi = async (
   status: 'approved' | 'rejected' | 'pending',
 ) => {
   try {
-    const response = await axios.post(
-      `${config.fetching.base}${config.fetching.approvals}/join-request`,
+    const response = await axiosWithToken.post(
+      `${config.fetching.approvals}/join-request`,
       { eventId, approverUserId, targetUserId, status },
     );
     return response.data;
@@ -81,8 +80,8 @@ export const getUserEventStatusApi = async (
   userId: number,
 ) => {
   try {
-    const response = await axios.get(
-      `${config.fetching.base}${config.fetching.events}/${eventId}/user-status/${userId}`,
+    const response = await axiosWithToken.get(
+      `${config.fetching.events}/${eventId}/user-status/${userId}`,
     );
     return response.data;
   } catch (error) {

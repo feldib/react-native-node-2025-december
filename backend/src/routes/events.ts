@@ -9,7 +9,7 @@ import {
   removeEventUser,
   leaveEvent,
 } from "../controllers/eventController";
-import { authenticateToken } from "../middleware/authenticate";
+import { authenticateAccessToken } from "../middleware/authenticate";
 
 const router = Router();
 
@@ -17,13 +17,17 @@ const router = Router();
 
 router.get("/", getAllEvents);
 // Protected routes - require authentication
-router.post("/", authenticateToken, createEvent);
+router.post("/", authenticateAccessToken, createEvent);
 
-router.get("/:id", authenticateToken, getEventById);
-router.get("/:id/user-status/:userId", authenticateToken, getUserEventStatus);
-router.put("/:id", authenticateToken, updateEvent);
-router.delete("/:id", authenticateToken, deleteEvent);
-router.put("/:id/users/:userId", authenticateToken, leaveEvent);
-router.delete("/:id/users/:userId", authenticateToken, removeEventUser);
+router.get("/:id", authenticateAccessToken, getEventById);
+router.get(
+  "/:id/user-status/:userId",
+  authenticateAccessToken,
+  getUserEventStatus
+);
+router.put("/:id", authenticateAccessToken, updateEvent);
+router.delete("/:id", authenticateAccessToken, deleteEvent);
+router.put("/:id/users/:userId", authenticateAccessToken, leaveEvent);
+router.delete("/:id/users/:userId", authenticateAccessToken, removeEventUser);
 
 export default router;

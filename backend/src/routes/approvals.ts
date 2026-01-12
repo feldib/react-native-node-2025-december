@@ -4,13 +4,13 @@ import {
   getJoinRequests,
   setJoinRequest,
 } from "../controllers/approvalController";
-import { authenticateToken } from "../middleware/authenticate";
+import { authenticateAccessToken } from "../middleware/authenticate";
 
 const router = Router();
 
 // Protected routes - require authentication
-router.post("/request-join", authenticateToken, requestJoinEvent);
-router.post("/join-requests", authenticateToken, getJoinRequests);
-router.post("/join-request", authenticateToken, setJoinRequest);
+router.post("/request-join", authenticateAccessToken, requestJoinEvent);
+router.post("/join-requests", authenticateAccessToken, getJoinRequests);
+router.post("/join-request", authenticateAccessToken, setJoinRequest);
 
 export default router;

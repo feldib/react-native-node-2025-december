@@ -28,7 +28,8 @@
       "about": "Magamról",
       "memberSince": "Tagóta",
       "photos": "Fotók",
-      "logout": "Kijelentkezés"
+      "logout": "Kijelentkezés",
+      "loggingOut": "Kijelentkezés..."
     },
     "navigation": {
       "current": "Aktuális",

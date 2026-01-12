@@ -3,7 +3,7 @@ import { AppDataSource } from "../config/database";
 import { User } from "../entities/User";
 import bcrypt from "bcrypt";
 import Gender from "../enums/gender";
-import { generateToken } from "../config/jwt";
+import { generateTokens, verifyRefreshToken } from "../config/jwt";
 
 const userRepository = AppDataSource.getRepository(User);
 
@@ -29,13 +29,18 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    const { password: _, ...userWithoutPassword } = user;
+    const { password: _, refreshToken: __, ...userWithoutPassword } = user;
 
-    const token = generateToken(user.id, user.email);
+    const { accessToken, refreshToken } = generateTokens(user.id, user.email);
+
+    // Store refresh token in database
+    user.refreshToken = refreshToken;
+    await userRepository.save(user);
 
     res.json({
       user: userWithoutPassword,
-      token,
+      accessToken,
+      refreshToken,
     });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -81,16 +86,94 @@ export const register = async (req: Request, res: Response) => {
 
     const savedUser = await userRepository.save(user);
 
-    const { password: _, ...userWithoutPassword } = savedUser;
+    const { password: _, refreshToken: __, ...userWithoutPassword } = savedUser;
 
-    const token = generateToken(savedUser.id, savedUser.email);
+    const { accessToken, refreshToken } = generateTokens(
+      savedUser.id,
+      savedUser.email
+    );
+
+    // Store refresh token in database
+    savedUser.refreshToken = refreshToken;
+    await userRepository.save(savedUser);
 
     res.status(201).json({
       user: userWithoutPassword,
-      token,
+      accessToken,
+      refreshToken,
     });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
+  }
+};
+
+export const refreshToken = async (req: Request, res: Response) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(401).json({ error: "Refresh token is required" });
+    }
+
+    // Verify the refresh token
+    const decoded = verifyRefreshToken(refreshToken);
+    if (!decoded) {
+      return res.status(403).json({ error: "Invalid refresh token" });
+    }
+
+    // Find user and verify refresh token matches stored one
+    const user = await userRepository.findOne({
+      where: { id: decoded.userId, isDeleted: false },
+    });
+
+    if (!user || user.refreshToken !== refreshToken) {
+      return res.status(403).json({ error: "Invalid refresh token" });
+    }
+
+    // Generate new tokens
+    const { accessToken, refreshToken: newRefreshToken } = generateTokens(
+      user.id,
+      user.email
+    );
+
+    // Store new refresh token in database
+    user.refreshToken = newRefreshToken;
+    await userRepository.save(user);
+
+    res.json({
+      accessToken,
+      refreshToken: newRefreshToken,
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const logout = async (req: Request, res: Response) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(400).json({ error: "Refresh token is required" });
+    }
+
+    // Verify and find user
+    const decoded = verifyRefreshToken(refreshToken);
+    if (decoded) {
+      const user = await userRepository.findOne({
+        where: { id: decoded.userId },
+      });
+
+      if (user) {
+        // Clear refresh token from database
+        user.refreshToken = null;
+        await userRepository.save(user);
+      }
+    }
+
+    res.json({ message: "Logged out successfully" });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
   }
 };
 
