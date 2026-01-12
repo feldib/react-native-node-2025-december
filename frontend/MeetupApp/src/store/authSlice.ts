@@ -1,17 +1,20 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { User } from '@/types/db/User';
-import { loginUser, registerUser } from '@/fetching/auth';
+import { loginUser, registerUser, logoutUser } from '@/fetching/auth';
+import { clearTokens } from '@/helpers/tokens';
 
 interface AuthState {
   user: User | null;
-  token: string | null;
+  accessToken: string | null;
+  refreshToken: string | null;
   isLoading: boolean;
   error: string | null;
 }
 
 const initialState: AuthState = {
   user: null,
-  token: null,
+  accessToken: null,
+  refreshToken: null,
   isLoading: false,
   error: null,
 };
@@ -56,15 +59,23 @@ export const register = createAsyncThunk(
   },
 );
 
+export const logout = createAsyncThunk(
+  'auth/logout',
+  async (_, { rejectWithValue }) => {
+    try {
+      await logoutUser();
+    } catch (error: any) {
+      // Clear tokens locally even if backend call fails
+      await clearTokens();
+      return rejectWithValue(error.response?.data?.error || 'Logout failed');
+    }
+  },
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logout: state => {
-      state.user = null;
-      state.token = null;
-      state.error = null;
-    },
     clearError: state => {
       state.error = null;
     },
@@ -78,10 +89,18 @@ const authSlice = createSlice({
       })
       .addCase(
         login.fulfilled,
-        (state, action: PayloadAction<{ user: User; token: string }>) => {
+        (
+          state,
+          action: PayloadAction<{
+            user: User;
+            accessToken: string;
+            refreshToken: string;
+          }>,
+        ) => {
           state.isLoading = false;
           state.user = action.payload.user;
-          state.token = action.payload.token;
+          state.accessToken = action.payload.accessToken;
+          state.refreshToken = action.payload.refreshToken;
           state.error = null;
         },
       )
@@ -96,19 +115,46 @@ const authSlice = createSlice({
       })
       .addCase(
         register.fulfilled,
-        (state, action: PayloadAction<{ user: User; token: string }>) => {
+        (
+          state,
+          action: PayloadAction<{
+            user: User;
+            accessToken: string;
+            refreshToken: string;
+          }>,
+        ) => {
           state.isLoading = false;
           state.user = action.payload.user;
-          state.token = action.payload.token;
+          state.accessToken = action.payload.accessToken;
+          state.refreshToken = action.payload.refreshToken;
           state.error = null;
         },
       )
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+      })
+      // Logout
+      .addCase(logout.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(logout.fulfilled, state => {
+        state.isLoading = false;
+        state.user = null;
+        state.accessToken = null;
+        state.refreshToken = null;
+        state.error = null;
+      })
+      .addCase(logout.rejected, (state, action) => {
+        state.isLoading = false;
+        // Still clear user data even if logout failed
+        state.user = null;
+        state.accessToken = null;
+        state.refreshToken = null;
+        state.error = action.payload as string;
       });
   },
 });
 
-export const { logout, clearError } = authSlice.actions;
+export const { clearError } = authSlice.actions;
 export default authSlice.reducer;

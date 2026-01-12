@@ -16,7 +16,7 @@ const ProfileScreen = () => {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector(state => state.auth);
+  const { user, isLoading } = useAppSelector(state => state.auth);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -117,6 +117,7 @@ const ProfileScreen = () => {
           { backgroundColor: colors.buttonSecondary },
         ]}
         onPress={handleLogout}
+        disabled={isLoading}
       >
         <Text
           style={[
@@ -124,7 +125,7 @@ const ProfileScreen = () => {
             { color: colors.buttonSecondaryText },
           ]}
         >
-          {t('profile.logout')}
+          {isLoading ? t('profile.loggingOut') : t('profile.logout')}
         </Text>
       </TouchableOpacity>
     </ScrollView>
