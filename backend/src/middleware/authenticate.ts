@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { verifyToken } from "../config/jwt";
+import { verifyAccessToken } from "../config/jwt";
 
 // Middleware for JWT authentication
-export const authenticateToken = (
+export const authenticateAccessToken = (
   req: Request,
   res: Response,
   next: NextFunction
@@ -15,7 +15,7 @@ export const authenticateToken = (
   }
 
   try {
-    const verified = verifyToken(token);
+    const verified = verifyAccessToken(token);
     if (!verified) {
       return res.status(403).json({ error: "Invalid or expired token" });
     }

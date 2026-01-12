@@ -48,6 +48,9 @@ export class User {
   @Column({ name: "is_deleted", default: false })
   isDeleted: boolean;
 
+  @Column({ name: "refresh_token", type: "text", nullable: true })
+  refreshToken: string | null;
+
   @OneToMany(() => UsersOfEvent, (usersOfEvent) => usersOfEvent.user)
   usersOfEvents: UsersOfEvent[];
 }
