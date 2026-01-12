@@ -29,7 +29,8 @@ export class Initial1764777528828 implements MigrationInterface {
         gender gender_enum NOT NULL,
         description TEXT,
         photos TEXT[] DEFAULT ARRAY[]::TEXT[],
-        is_deleted BOOLEAN DEFAULT false
+        is_deleted BOOLEAN DEFAULT false,
+        refresh_token TEXT
       );
     `);
 

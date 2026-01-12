@@ -28,7 +28,8 @@
       "about": "About",
       "memberSince": "Member Since",
       "photos": "Photos",
-      "logout": "Logout"
+      "logout": "Logout",
+      "loggingOut": "Logging out..."
     },
     "navigation": {
       "current": "Current",

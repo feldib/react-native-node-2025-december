@@ -2,23 +2,27 @@ import { Router } from "express";
 import {
   login,
   register,
+  refreshToken,
+  logout,
   getAllUsers,
   getUserById,
   updateUser,
   deleteUser,
 } from "../controllers/userController";
-import { authenticateToken } from "../middleware/authenticate";
+import { authenticateAccessToken } from "../middleware/authenticate";
 
 const router = Router();
 
 // Authentication routes (public)
 router.post("/login", login);
 router.post("/register", register);
+router.post("/refresh-token", refreshToken);
+router.post("/logout", logout);
 
 // Protected routes - require authentication
-router.get("/", authenticateToken, getAllUsers);
-router.get("/:id", authenticateToken, getUserById);
-router.put("/:id", authenticateToken, updateUser);
-router.delete("/:id", authenticateToken, deleteUser);
+router.get("/", authenticateAccessToken, getAllUsers);
+router.get("/:id", authenticateAccessToken, getUserById);
+router.put("/:id", authenticateAccessToken, updateUser);
+router.delete("/:id", authenticateAccessToken, deleteUser);
 
 export default router;
