@@ -76,16 +76,3 @@ export const logoutUser = async () => {
     throw error;
   }
 };
-
-export const requestTokenRefresh = async (refreshToken: string) => {
-  try {
-    const response = await axiosNoToken.post(
-      `${config.fetching.users}/refresh-token`,
-      { refreshToken },
-    );
-    return response;
-  } catch (error) {
-    console.error('Error refreshing token:', error);
-    throw error;
-  }
-};

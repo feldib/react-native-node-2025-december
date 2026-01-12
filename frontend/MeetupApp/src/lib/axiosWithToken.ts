@@ -7,7 +7,7 @@ import {
   storeRefreshToken,
   clearTokens,
 } from '@/helpers/tokens';
-import { requestTokenRefresh } from '@/fetching/auth';
+import axiosNoToken from './axiosNoToken';
 
 // Create axios instance fot checking tokens
 const axiosWithToken = axios.create({
@@ -49,8 +49,11 @@ axiosWithToken.interceptors.response.use(
           throw error;
         }
 
-        // Try to refresh the token
-        const response = await requestTokenRefresh(refreshToken);
+        // Try to refresh the token directly using axiosNoToken
+        const response = await axiosNoToken.post(
+          `${config.fetching.users}/refresh-token`,
+          { refreshToken },
+        );
 
         const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
           response.data;
