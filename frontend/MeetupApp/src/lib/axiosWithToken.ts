@@ -36,7 +36,7 @@ axiosWithToken.interceptors.response.use(
   async error => {
     const originalRequest = error.config;
 
-    // If error is 401 or 403 (invalid/expired token) and we haven't tried to refresh yet
+    // If error is 401 (Unauthorized) or 403 (Forbidden - invalid/expired token) and we haven't tried to refresh yet
     if (
       (error.response?.status === 401 || error.response?.status === 403) &&
       !originalRequest._retry
