@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User } from '@/types/db/User';
 import { logoutUser } from '@/fetching/auth';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface AuthContextType {
   user: User | null;
@@ -17,6 +18,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const queryClient = useQueryClient();
 
   // Load persisted auth state on app start
   useEffect(() => {
@@ -45,7 +47,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       console.error('Failed to save auth state:', error);
     }
   };
-
   const logout = async () => {
     try {
       setIsLoading(true);
@@ -54,11 +55,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       // Clear user from state and AsyncStorage
       setUser(null);
       await AsyncStorage.removeItem('user');
+      // Clear all React Query cache to prevent refetches with old tokens
+      queryClient.clear();
+      console.log('Logout complete, all caches cleared');
     } catch (error) {
       console.error('Failed to logout:', error);
       // Still clear local state even if backend call fails
       setUser(null);
       await AsyncStorage.removeItem('user');
+      queryClient.clear();
     } finally {
       setIsLoading(false);
     }
