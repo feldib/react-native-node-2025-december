@@ -18,8 +18,15 @@ const axiosWithToken = axios.create({
 axiosWithToken.interceptors.request.use(
   async conf => {
     const accessToken = await getAccessToken();
+    console.log(
+      'Request interceptor - Access token:',
+      accessToken ? 'exists' : 'missing',
+    );
     if (accessToken) {
       conf.headers.Authorization = `Bearer ${accessToken}`;
+      console.log('Authorization header set');
+    } else {
+      console.log('WARNING: No access token found!');
     }
     return conf;
   },

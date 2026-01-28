@@ -13,11 +13,18 @@ export const loginUser = async (email: string, password: string) => {
       password,
     });
 
+    console.log('Login response received:', {
+      hasAccessToken: !!response.data.accessToken,
+      hasRefreshToken: !!response.data.refreshToken,
+    });
+
     const { accessToken, refreshToken } = response.data;
 
     // Store tokens securely
     await storeAccessToken(accessToken);
     await storeRefreshToken(refreshToken);
+
+    console.log('Tokens stored successfully');
 
     return response.data;
   } catch (error) {
@@ -60,6 +67,8 @@ export const logoutUser = async () => {
     const { getRefreshToken } = await import('@/helpers/tokens');
     const refreshToken = await getRefreshToken();
 
+    console.log('Logging out, refreshToken exists:', !!refreshToken);
+
     if (refreshToken) {
       // Call backend logout endpoint
       await axiosNoToken.post(`${config.fetching.users}/logout`, {
@@ -69,6 +78,7 @@ export const logoutUser = async () => {
 
     // Clear tokens from device
     await clearTokens();
+    console.log('Tokens cleared from device');
   } catch (error) {
     console.error('Error logging out:', error);
     // Clear tokens anyway even if backend call fails
