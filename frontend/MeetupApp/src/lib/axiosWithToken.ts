@@ -54,7 +54,7 @@ axiosWithToken.interceptors.response.use(
         const refreshToken = await getRefreshToken();
 
         if (!refreshToken) {
-          // No refresh token, clear everything and redirect to login
+          console.log('No refresh token found, clearing tokens...');
           await clearTokens();
           throw error;
         }
@@ -76,7 +76,7 @@ axiosWithToken.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return axiosWithToken(originalRequest);
       } catch (refreshError) {
-        // Refresh failed, clear tokens and
+        console.log('Token refresh failed, clearing tokens...');
         await clearTokens();
         return Promise.reject(refreshError);
       }
