@@ -34,8 +34,12 @@ export const getAllEvents = async (req: Request, res: Response) => {
     // Get all users for all events
     const eventsWithUsers = await Promise.all(
       events.map(async (event) => {
+        // Get users for this event, that are either approved or creators
         const relations = await usersOfEventRepository.find({
-          where: { eventId: event.id },
+          where: [
+            { eventId: event.id, leftEvent: false, isApproved: true },
+            { eventId: event.id, leftEvent: false, isCreator: true },
+          ],
           relations: ["user"],
         });
 

@@ -15,11 +15,12 @@ import {
   useEventQuery,
   useUserEventStatusQuery,
 } from '@/hooks/queries/useEvents';
-import UserIconSection from '@/components/event/UserIconSection/UserIconSection';
+import PendingApprovals from '@/components/event/PendingApprovals/PendingApprovals';
 import { DisplayedEventType } from '@/enums/routes';
 import useJoinButton from './useJoinButton';
 import { useTheme } from '@/theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
+import JoinedUsersSection from '@/components/event/JoinedUsersSection/JoinedUsersSection';
 
 type EventDetailScreenProps = StaticScreenProps<{
   eventId: number;
@@ -113,7 +114,7 @@ const EventDetailScreen = ({ route }: EventDetailScreenProps) => {
         {eventType === 'past' && finishDate && (
           <Text>Finish date: {finishDate.toLocaleString()}</Text>
         )}
-        <UserIconSection users={event.users} />
+        <JoinedUsersSection users={event.users} />
 
         {eventType === 'current' ? (
           <TouchableOpacity
@@ -128,6 +129,13 @@ const EventDetailScreen = ({ route }: EventDetailScreenProps) => {
             </Text>
           </TouchableOpacity>
         ) : null}
+
+        {eventType === 'current' &&
+          user &&
+          userEventStatus &&
+          (userEventStatus.isCreator || userEventStatus.isApproved) && (
+            <PendingApprovals eventId={eventId} currentUserId={user.id} />
+          )}
       </View>
     </ScrollView>
   );

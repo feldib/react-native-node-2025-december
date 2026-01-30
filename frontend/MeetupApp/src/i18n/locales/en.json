@@ -45,7 +45,10 @@
       "youAreCreator": "You're the creator",
       "joined": "Joined",
       "waitingApproval": "Waiting for approval",
-      "join": "Join"
+      "join": "Join",
+      "pendingApprovals": "Pending Approvals",
+      "youApproved": "You approved",
+      "youRejected": "You rejected"
     },
     "categories": {
       "meetup": "Találkozó",

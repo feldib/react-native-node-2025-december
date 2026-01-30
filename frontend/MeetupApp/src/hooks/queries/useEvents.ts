@@ -7,6 +7,7 @@ import {
   setJoinRequestApi,
   getUserEventStatusApi,
 } from '@/fetching/events';
+import { ApprovalStatus } from '@/types/approval/approval';
 
 // Query keys
 export const eventKeys = {
@@ -100,7 +101,7 @@ export const useSetJoinRequestMutation = () => {
       eventId: number;
       approverUserId: number;
       targetUserId: number;
-      status: 'approved' | 'rejected' | 'pending';
+      status: ApprovalStatus;
     }) => {
       return await setJoinRequestApi(
         eventId,
@@ -120,6 +121,11 @@ export const useSetJoinRequestMutation = () => {
       // Invalidate event details
       queryClient.invalidateQueries({
         queryKey: eventKeys.detail(variables.eventId),
+      });
+      // Mark events list as stale so it refetches when the user navigates back
+      queryClient.invalidateQueries({
+        queryKey: eventKeys.list(),
+        refetchType: 'none', // Don't refetch immediately, just mark as stale
       });
     },
   });

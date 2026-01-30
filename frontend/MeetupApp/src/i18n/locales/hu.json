@@ -45,7 +45,10 @@
       "youAreCreator": "Te vagy a szervezõ",
       "joined": "Csatlakozva",
       "waitingApproval": "Jóváhagyásra vár",
-      "join": "Csatlakozás"
+      "join": "Csatlakozás",
+      "pendingApprovals": "Függőben lévő jóváhagyások",
+      "youApproved": "Jóváhagytad",
+      "youRejected": "Elutasítottad"
     },
     "categories": {
       "meetup": "Találkozó",

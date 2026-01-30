@@ -1,6 +1,7 @@
 import axiosWithToken from '@/lib/axiosWithToken';
 import config from '../../config';
 import axiosNoToken from '@/lib/axiosNoToken';
+import { ApprovalStatus } from '@/types/approval/approval';
 
 export const getEvents = async () => {
   try {
@@ -63,7 +64,7 @@ export const setJoinRequestApi = async (
   eventId: number,
   approverUserId: number,
   targetUserId: number,
-  status: 'approved' | 'rejected' | 'pending',
+  status: ApprovalStatus,
 ) => {
   try {
     const response = await axiosWithToken.post(
