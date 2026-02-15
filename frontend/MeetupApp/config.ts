@@ -1,5 +1,7 @@
+import { Platform } from 'react-native';
 import {
-  BASE_API_URL,
+  BASE_API_URL_IOS,
+  BASE_API_URL_ANDROID,
   EVENTS_ENDPOINT,
   CATEGORIES_ENDPOINT,
   USERS_ENDPOINT,
@@ -8,7 +10,10 @@ import {
 } from '@env';
 
 const fetching = {
-  base: BASE_API_URL || 'http://localhost:3000/api',
+  base: Platform.select({
+    ios: BASE_API_URL_IOS || 'http://localhost:3000/api',
+    android: BASE_API_URL_ANDROID || 'http://localhost:3000/api',
+  }),
   events: EVENTS_ENDPOINT || '/events',
   categories: CATEGORIES_ENDPOINT || '/categories',
   users: USERS_ENDPOINT || '/users',
